@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(express.static('public'));
 
 //////////////////////////////////////
-//ROUTES TO SERVE HTML FILES
+//ROUTES TO SERVE HTML FILES - test
 //////////////////////////////////////
 // Default route to serve logon.html
 app.get('/', (req, res) => {
