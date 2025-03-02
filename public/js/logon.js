@@ -36,8 +36,11 @@ logonForm.addEventListener('submit', async (event) => {
         if (response.ok) {
             localStorage.setItem('jwtToken', result.token);
             window.location.href = '/dashboard';
+        } else if (response.status === 401) {
+            messageEl.textContent = 'Invalid email or password. Please try again.';
+            messageEl.classList.add('error');
         } else {
-            messageEl.textContent = result.message;
+            messageEl.textContent = result.message || 'An error occurred. Please try again.';
             messageEl.classList.add('error');
         }
     } catch (error) {
