@@ -6,9 +6,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logon</title>
     <link rel="stylesheet" href="css/logon.css">
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Quadrant background effect */
+        body::before {
+            content: "";
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            background-color: teal;
+            top: 0;
+            left: 0;
+        }
+
+        body::after {
+            content: "";
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            background-color: blue;
+            top: 0;
+            right: 0;
+        }
+
+        .bottom-left {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            background-color: red;
+            bottom: 0;
+            left: 0;
+        }
+
+        .bottom-right {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            background-color: yellow;
+            bottom: 0;
+            right: 0;
+        }
+
+        .container {
+            position: relative;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 10;
+        }
+    </style>
 </head>
 
 <body>
+    <div class="bottom-left"></div>
+    <div class="bottom-right"></div>
+    
     <div class="container">
         <h1>Welcome to Node App</h1>
         <div class="tab">
@@ -17,7 +78,6 @@
         </div>
 
         <div id="form-container">
-            <!-- Logon Form -->
             <form id="logon-form" class="active-form">
                 <label for="login-email">Email:</label>
                 <input type="email" id="login-email" placeholder="Enter your email" required>
@@ -28,7 +88,6 @@
                 <button type="submit" class="button">Logon</button>
             </form>
 
-            <!-- Create Account Form -->
             <form id="create-account-form">
                 <label for="create-email">Email:</label>
                 <input type="email" id="create-email" placeholder="Enter your email" required>
@@ -45,5 +104,4 @@
 
     <script src="js/logon.js"></script>
 </body>
-
 </html>
