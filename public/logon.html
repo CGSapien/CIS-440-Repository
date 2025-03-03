@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,166 +10,82 @@
             margin: 0;
             height: 100vh;
             display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             position: relative;
             overflow: hidden;
         }
-
         /* Quadrant background effect */
-        .quadrant {
+        body::before {
+            content: "";
             position: absolute;
             width: 50%;
             height: 50%;
+            background-color: #00AB9F;
+            top: 0;
+            left: 0;
         }
-        .top-left { background-color: teal; top: 0; left: 0; }
-        .top-right { background-color: blue; top: 0; right: 0; }
-        .bottom-left { background-color: red; bottom: 0; left: 0; }
-        .bottom-right { background-color: yellow; bottom: 0; right: 0; }
-
-        /* FIT HUB Logo */
-        .logo-container {
+        body::after {
+            content: "";
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .overlay-text {
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .top-left-text { color: black; position: absolute; top: -40px; left: -120px; }
-        .bottom-left-text { color: white; position: absolute; bottom: -40px; left: -120px; }
-        .top-right-text { color: black; position: absolute; top: -40px; right: -120px; }
-        .bottom-right-text { color: white; position: absolute; bottom: -40px; right: -120px; }
-
-        .logo {
-            width: 300px;
-            height: 150px;
-            display: flex;
-            border: 5px solid black;
-            position: relative;
-        }
-
-        .black-bg {
-            background-color: black;
-            color: white;
             width: 50%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            font-weight: bold;
-            text-transform: uppercase;
-            position: relative;
+            height: 50%;
+            background-color: #2E6DB4;
+            top: 0;
+            right: 0;
         }
-
-        .white-bg {
-            background-color: white;
-            color: black;
+        .bottom-left {
+            position: absolute;
             width: 50%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            font-weight: bold;
-            text-transform: uppercase;
-            position: relative;
+            height: 50%;
+            background-color: #DF0024;
+            bottom: 0;
+            left: 0;
         }
-
+        .bottom-right {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            background-color: #F3C300;
+            bottom: 0;
+            right: 0;
+        }
         .container {
-            position: absolute;
-            bottom: 20px;
-            background: white;
+            position: relative;
+            background: rgba(255, 255, 255, 0.9);
             padding: 20px;
-            border: 1px solid black;
-            z-index: 5;
-            text-align: center;
-            width: 300px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-            border-radius: 0;
-        }
-
-        .tab {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-
-        .tab-button {
-            flex: 1;
-            padding: 10px;
-            cursor: pointer;
-            border: none;
-            background-color: lightgray;
-            font-weight: bold;
-        }
-
-        .tab-button.active {
-            background-color: gray;
-            color: white;
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            text-align: left;
-        }
-
-        .input-group label {
-            margin-top: 10px;
-        }
-
-        .input-group input {
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 10px;
+            z-index: 10;
         }
     </style>
 </head>
-
 <body>
-    <div class="quadrant top-left"></div>
-    <div class="quadrant top-right"></div>
-    <div class="quadrant bottom-left"></div>
-    <div class="quadrant bottom-right"></div>
-    
-    <div class="logo-container">
-        <div class="overlay-text top-left-text">Mental</div>
-        <div class="overlay-text bottom-left-text">Social</div>
-        <div class="logo">
-            <div class="black-bg">FIT</div><div class="white-bg">HUB</div>
-        </div>
-        <div class="overlay-text top-right-text">Spiritual</div>
-        <div class="overlay-text bottom-right-text">Physical</div>
-    </div>
-    
+    <div class="bottom-left"></div>
+    <div class="bottom-right"></div>
     <div class="container">
+        <h1>Welcome to Node App</h1>
         <div class="tab">
-            <button class="tab-button active" id="login-tab">Log-in</button>
+            <button class="tab-button active" id="login-tab">Logon</button>
             <button class="tab-button" id="create-account-tab">Create Account</button>
         </div>
-
-        <div class="input-group">
-            <label for="login-email">Enter Email:</label>
-            <input type="email" id="login-email" placeholder="Enter your email" required>
-        </div>
-
-        <div class="input-group">
-            <label for="login-password">Enter Password:</label>
-            <input type="password" id="login-password" placeholder="Enter your password" required>
+        <div id="form-container">
+            <form id="logon-form" class="active-form">
+                <label for="login-email">Email:</label>
+                <input type="email" id="login-email" placeholder="Enter your email" required>
+                <label for="login-password">Password:</label>
+                <input type="password" id="login-password" placeholder="Enter your password" required>
+                <button type="submit" class="button">Logon</button>
+            </form>
+            <form id="create-account-form">
+                <label for="create-email">Email:</label>
+                <input type="email" id="create-email" placeholder="Enter your email" required>
+                <label for="create-password">Password:</label>
+                <input type="password" id="create-password" placeholder="Create your password" required>
+                <button type="submit" class="button">Create Account</button>
+            </form>
+            <p id="message" class="message"></p>
         </div>
     </div>
-
     <script src="js/logon.js"></script>
 </body>
 </html>
