@@ -7,20 +7,20 @@
     <link rel="stylesheet" href="css/profilepage.css">
 </head>
 <body>
-    
 
+    <!-- Background Quadrants -->
+    <div class="background-container">
+        <div class="quadrant top-left"></div>
+        <div class="quadrant top-right"></div>
+        <div class="quadrant bottom-left"></div>
+        <div class="quadrant bottom-right"></div>
+    </div>
+
+    <!-- Main Content -->
     <div class="header">
         <img src="logo.png" alt="Fit Hub Logo" class="logo">
         <button class="mindmap-button">Mindmap</button>
-        <button id="refreshButton">Refresh List</button>
         <button id="logoutButton">Log Out</button>
-    </div>
-
-    <div class="container">
-        <div class="quadrant green"></div>
-        <div class="quadrant blue"></div>
-        <div class="quadrant red"></div>
-        <div class="quadrant yellow"></div>
     </div>
 
     <div class="button-container">
@@ -31,10 +31,11 @@
     </div>
 
     <div class="container">
-        
         <h1>Users</h1>
         <div class="user-list" id="userList"></div>
+        <button id="refreshButton">Refresh List</button>
     </div>
+    
     <script src="/js/dashboard.js"></script>
     <script src="/js/datamodel.js"></script>
 
