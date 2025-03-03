@@ -44,7 +44,7 @@ html, body {
     justify-content: space-between;
     align-items: center;
     padding: 15px 20px;
-    background: rgba(0, 0, 0, 0.8);
+    
     color: white;
 }
 
@@ -78,7 +78,7 @@ html, body {
 
 /* Button container centered in the middle of the page */
 .button-container {
-    display: flex;
+    display: 10px;
     justify-content: center;
     gap: 15px;
     margin-top: 32vh; /* Adjusted to be centered vertically */
