@@ -5,10 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile Dashboard</title>
     <link rel="stylesheet" href="css/profilepage.css">
+    <style>
+        body { font-family: Impact, sans-serif; }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            width: 50%;
+            max-width: 500px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .modal button { margin-top: 10px; }
+    </style>
 </head>
 <body>
-
-    <!-- Background Quadrants -->
     <div class="background-container">
         <div class="quadrant top-left"></div>
         <div class="quadrant top-right"></div>
@@ -16,10 +44,9 @@
         <div class="quadrant bottom-right"></div>
     </div>
 
-    <!-- Main Content -->
     <div class="header">
         <img src="logo.png" alt="Fit Hub Logo" class="logo">
-        <button class="mindmap-button">Mindmap</button>
+        <button class="mindmap-button" id="mindmapButton">Mindmap</button>
         <button id="logoutButton">Log Out</button>
     </div>
 
@@ -35,9 +62,73 @@
         <div class="user-list" id="userList"></div>
         <button id="refreshButton">Refresh List</button>
     </div>
-    
+
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div id="mindmapModal" class="modal">
+        <h2>Mindmap Goals</h2>
+        <label>Main Goal:</label>
+        <input type="text" id="mainGoal"><br>
+        
+        <button onclick="addSubGoal()" id="addSubGoalButton">Add Sub Goal</button>
+        <div id="subGoals"></div>
+        
+        <button onclick="closeModal()">Close</button>
+        <button onclick="submitGoals()">Submit</button>
+    </div>
+
     <script src="/js/dashboard.js"></script>
     <script src="/js/datamodel.js"></script>
+    <script>
+        document.getElementById("mindmapButton").addEventListener("click", function() {
+            document.getElementById("mindmapModal").style.display = "block";
+            document.getElementById("modalOverlay").style.display = "block";
+        });
 
+        function closeModal() {
+            document.getElementById("mindmapModal").style.display = "none";
+            document.getElementById("modalOverlay").style.display = "none";
+        }
+
+        function addSubGoal() {
+            let subGoals = document.getElementById("subGoals").children.length;
+            if (subGoals >= 2) return;
+            
+            let div = document.createElement("div");
+            div.innerHTML = `<label>Sub Goal:</label>
+                             <input type='text'>
+                             <button onclick='addTertiaryGoal(this)'>Add Tertiary Goal</button>
+                             <div class='tertiaryGoals'></div>`;
+            document.getElementById("subGoals").appendChild(div);
+        }
+
+        function addTertiaryGoal(button) {
+            let parentDiv = button.nextElementSibling;
+            let tertiaryGoals = parentDiv.children.length;
+            if (tertiaryGoals >= 2) return;
+
+            let div = document.createElement("div");
+            div.innerHTML = `<label>Tertiary Goal:</label>
+                             <input type='text'>
+                             <button onclick='addActionStep(this)'>Add Action Step</button>
+                             <div class='actionSteps'></div>`;
+            parentDiv.appendChild(div);
+        }
+
+        function addActionStep(button) {
+            let parentDiv = button.nextElementSibling;
+            let actionSteps = parentDiv.children.length;
+            if (actionSteps >= 2) return;
+
+            let div = document.createElement("div");
+            div.innerHTML = `<label>Action Step:</label>
+                             <input type='text'>`;
+            parentDiv.appendChild(div);
+        }
+
+        function submitGoals() {
+            alert("Goals submitted!");
+            closeModal();
+        }
+    </script>
 </body>
 </html>
