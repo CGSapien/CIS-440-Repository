@@ -175,6 +175,104 @@ app.get('/api/users', authenticateToken, async (req, res) => {
         res.status(500).json({ message: 'Error retrieving email addresses.' });
     }
 });
+
+//Route: Get Users Goals
+app.get('/api/goals', authenticateToken, async (req, res) => {
+    try {
+        const userEmail = req.user.email; // Extract email from the authenticated token
+
+        const connection = await createConnection();
+        const [rows] = await connection.execute(
+            'SELECT tertiary1, tertiary2, Sub1, Sub2, main_goal FROM my_table WHERE email = ?',
+            [userEmail]
+        );
+
+        await connection.end();
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: 'Goals not found for this user.' });
+        }
+
+        res.status(200).json({ goals: rows[0] }); // Return the user's goal data
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error retrieving goals.' });
+    }
+});
+
+// add or updates goals
+app.put('/api/goals', authenticateToken, async (req, res) => {
+    const { tertiary1, tertiary2, Sub1, Sub2, main_goal } = req.body; // Data to update
+    const email = req.user.email; // Email from the decoded JWT payload
+
+    // Build the columns to update dynamically
+    const updateValues = [];
+    const updateFields = [];
+    
+    if (tertiary1) {
+        updateFields.push('tertiary1 = ?');
+        updateValues.push(tertiary1);
+    }
+    if (tertiary2) {
+        updateFields.push('tertiary2 = ?');
+        updateValues.push(tertiary2);
+    }
+    if (Sub1) {
+        updateFields.push('Sub1 = ?');
+        updateValues.push(Sub1);
+    }
+    if (Sub2) {
+        updateFields.push('Sub2 = ?');
+        updateValues.push(Sub2);
+    }
+    if (main_goal) {
+        updateFields.push('main_goal = ?');
+        updateValues.push(main_goal);
+    }
+
+    // Add the user's email to the values to identify the correct row
+    updateValues.push(email);
+
+    try {
+        const connection = await createConnection();
+
+        // First, check if the user already has goals
+        const [existingGoals] = await connection.execute(
+            'SELECT * FROM my_table WHERE email = ?',
+            [email]
+        );
+
+        if (existingGoals.length > 0) {
+            // User exists, update goals
+            const query = `UPDATE my_table
+                           SET ${updateFields.join(', ')}
+                           WHERE email = ?`;
+
+            await connection.execute(query, updateValues);
+            res.status(200).json({ message: 'Goals updated successfully' });
+        } else {
+            // User doesn't have goals, insert new ones
+            const query = `INSERT INTO my_table (email, tertiary1, tertiary2, Sub1, Sub2, main_goal)
+                           VALUES (?, ?, ?, ?, ?, ?)`;
+
+            // Fill in missing fields with `null` if not provided
+            await connection.execute(query, [
+                email,
+                tertiary1 || null,
+                tertiary2 || null,
+                Sub1 || null,
+                Sub2 || null,
+                main_goal || null
+            ]);
+            res.status(201).json({ message: 'Goals added successfully' });
+        }
+
+        await connection.end(); // Close the connection
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error saving goals' });
+    }
+});
 //////////////////////////////////////
 //END ROUTES TO HANDLE API REQUESTS
 //////////////////////////////////////
