@@ -209,23 +209,23 @@ app.put('/api/goals', authenticateToken, async (req, res) => {
     const updateValues = [];
     const updateFields = [];
     
-    if (tertiary1) {
+    if (req.body.hasOwnProperty('tertiary1')) {
         updateFields.push('tertiary1 = ?');
         updateValues.push(tertiary1);
     }
-    if (tertiary2) {
+    if (req.body.hasOwnProperty('tertiary2')) {
         updateFields.push('tertiary2 = ?');
         updateValues.push(tertiary2);
     }
-    if (Sub1) {
+    if (req.body.hasOwnProperty('Sub1')) {
         updateFields.push('Sub1 = ?');
         updateValues.push(Sub1);
     }
-    if (Sub2) {
+    if (req.body.hasOwnProperty('Sub2')) {
         updateFields.push('Sub2 = ?');
         updateValues.push(Sub2);
     }
-    if (main_goal) {
+    if (req.body.hasOwnProperty('main_goal')) {
         updateFields.push('main_goal = ?');
         updateValues.push(main_goal);
     }
@@ -244,25 +244,26 @@ app.put('/api/goals', authenticateToken, async (req, res) => {
 
         if (existingGoals.length > 0) {
             // User exists, update goals
-            const query = `UPDATE my_table
-                           SET ${updateFields.join(', ')}
-                           WHERE email = ?`;
-
-            await connection.execute(query, updateValues);
+            if (updateFields.length > 0) {
+                const query = `UPDATE my_table
+                               SET ${updateFields.join(', ')}
+                               WHERE email = ?`;
+                await connection.execute(query, updateValues);
+            }
             res.status(200).json({ message: 'Goals updated successfully' });
         } else {
             // User doesn't have goals, insert new ones
             const query = `INSERT INTO my_table (email, tertiary1, tertiary2, Sub1, Sub2, main_goal)
                            VALUES (?, ?, ?, ?, ?, ?)`;
 
-            // Fill in missing fields with `null` if not provided
+            // Insert values, including explicit `null` if provided
             await connection.execute(query, [
                 email,
-                tertiary1 || null,
-                tertiary2 || null,
-                Sub1 || null,
-                Sub2 || null,
-                main_goal || null
+                tertiary1 !== undefined ? tertiary1 : null,
+                tertiary2 !== undefined ? tertiary2 : null,
+                Sub1 !== undefined ? Sub1 : null,
+                Sub2 !== undefined ? Sub2 : null,
+                main_goal !== undefined ? main_goal : null
             ]);
             res.status(201).json({ message: 'Goals added successfully' });
         }
@@ -273,6 +274,7 @@ app.put('/api/goals', authenticateToken, async (req, res) => {
         res.status(500).json({ message: 'Error saving goals' });
     }
 });
+
 //////////////////////////////////////
 //END ROUTES TO HANDLE API REQUESTS
 //////////////////////////////////////
