@@ -202,78 +202,55 @@ app.get('/api/goals', authenticateToken, async (req, res) => {
 
 // add or updates goals
 app.put('/api/goals', authenticateToken, async (req, res) => {
-    const { tertiary1, tertiary2, Sub1, Sub2, main_goal } = req.body; // Data to update
-    const email = req.user.email; // Email from the decoded JWT payload
-
-    // Build the columns to update dynamically
-    const updateValues = [];
-    const updateFields = [];
-    
-    if (req.body.hasOwnProperty('tertiary1')) {
-        updateFields.push('tertiary1 = ?');
-        updateValues.push(tertiary1);
-    }
-    if (req.body.hasOwnProperty('tertiary2')) {
-        updateFields.push('tertiary2 = ?');
-        updateValues.push(tertiary2);
-    }
-    if (req.body.hasOwnProperty('Sub1')) {
-        updateFields.push('Sub1 = ?');
-        updateValues.push(Sub1);
-    }
-    if (req.body.hasOwnProperty('Sub2')) {
-        updateFields.push('Sub2 = ?');
-        updateValues.push(Sub2);
-    }
-    if (req.body.hasOwnProperty('main_goal')) {
-        updateFields.push('main_goal = ?');
-        updateValues.push(main_goal);
-    }
-
-    // Add the user's email to the values to identify the correct row
-    updateValues.push(email);
-
     try {
+        const { tertiary1, tertiary2, Sub1, Sub2, main_goal } = req.body;
+        const email = req.user.email;
+
         const connection = await createConnection();
 
-        // First, check if the user already has goals
-        const [existingGoals] = await connection.execute(
-            'SELECT * FROM my_table WHERE email = ?',
+        // Check if a record already exists for the user
+        const [existingRows] = await connection.execute(
+            'SELECT email FROM goals WHERE email = ?',
             [email]
         );
 
-        if (existingGoals.length > 0) {
-            // User exists, update goals
-            if (updateFields.length > 0) {
-                const query = `UPDATE my_table
-                               SET ${updateFields.join(', ')}
-                               WHERE email = ?`;
-                await connection.execute(query, updateValues);
-            }
-            res.status(200).json({ message: 'Goals updated successfully' });
+        if (existingRows.length > 0) {
+            // Update existing goals (null values included if explicitly provided)
+            await connection.execute(
+                `UPDATE goals SET 
+                    tertiary1 = ?,
+                    tertiary2 = ?,
+                    Sub1 = ?,
+                    Sub2 = ?,
+                    main_goal = ?
+                 WHERE email = ?`,
+                [
+                    tertiary1 !== undefined ? tertiary1 : existingRows[0].tertiary1,
+                    tertiary2 !== undefined ? tertiary2 : existingRows[0].tertiary2,
+                    Sub1 !== undefined ? Sub1 : existingRows[0].Sub1,
+                    Sub2 !== undefined ? Sub2 : existingRows[0].Sub2,
+                    main_goal !== undefined ? main_goal : existingRows[0].main_goal,
+                    email
+                ]
+            );
+            res.status(200).json({ message: 'Goals updated successfully.' });
         } else {
-            // User doesn't have goals, insert new ones
-            const query = `INSERT INTO my_table (email, tertiary1, tertiary2, Sub1, Sub2, main_goal)
-                           VALUES (?, ?, ?, ?, ?, ?)`;
-
-            // Insert values, including explicit `null` if provided
-            await connection.execute(query, [
-                email,
-                tertiary1 !== undefined ? tertiary1 : null,
-                tertiary2 !== undefined ? tertiary2 : null,
-                Sub1 !== undefined ? Sub1 : null,
-                Sub2 !== undefined ? Sub2 : null,
-                main_goal !== undefined ? main_goal : null
-            ]);
-            res.status(201).json({ message: 'Goals added successfully' });
+            // Insert new goals (null allowed)
+            await connection.execute(
+                `INSERT INTO goals (email, tertiary1, tertiary2, Sub1, Sub2, main_goal) 
+                 VALUES (?, ?, ?, ?, ?, ?)`,
+                [email, tertiary1 || null, tertiary2 || null, Sub1 || null, Sub2 || null, main_goal || null]
+            );
+            res.status(201).json({ message: 'Goals added successfully.' });
         }
 
-        await connection.end(); // Close the connection
+        await connection.end();
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error saving goals' });
+        res.status(500).json({ message: 'Error updating goals.' });
     }
 });
+
 
 //////////////////////////////////////
 //END ROUTES TO HANDLE API REQUESTS

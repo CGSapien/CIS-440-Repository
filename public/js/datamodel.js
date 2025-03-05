@@ -17,6 +17,7 @@ const DataModel = (function () {
     //AND THE LIST OF USERS.
     let token = null;  // Holds the JWT token
     let users = [];    // Holds the list of user emails
+    let goals = [];
 
     //WE CAN CREATE FUNCTIONS HERE TO FETCH DATA FROM THE SERVER
     //AND RETURN IT TO THE CONTROLLER.  THE CONTROLLER CAN THEN
@@ -66,6 +67,66 @@ const DataModel = (function () {
                 return [];
             }
         },
+
+        //function to get the goals of the user
+        getUserGoals: async function () {
+            // Check if the token is set
+            if (!token) {
+                console.error("Token is not set.");
+                return null; // Return null instead of an empty array since we are fetching a single user's goals
+            }
+        
+            try {
+                // Call the /api/goals route on the server
+                const response = await fetch('/api/goals', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': token ,  
+                        'Content-Type': 'application/json',
+                    },
+                });
+        
+                if (!response.ok) {
+                    console.error("Error fetching user goals:", await response.json());
+                    return null;
+                }
+        
+                goals = await response.json();
+                return goals;  // Return the fetched goals
+            } catch (error) {
+                console.error("Error in API call:", error);
+                return null;
+            }
+        },
+        //update the goals 
+        updateUserGoals: async function (goalData) {
+            if (!token) {
+                console.error("Token is not set.");
+                return false; // Indicate failure
+            }
+    
+            try {
+                const response = await fetch('/api/goals', {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,  // Ensure proper format
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(goalData),
+                });
+    
+                if (!response.ok) {
+                    console.error("Error updating user goals:", await response.json());
+                    return false; // Indicate failure
+                }
+    
+                console.log("Goals updated successfully.");
+                return true; // Indicate success
+            } catch (error) {
+                console.error("Error in API call:", error);
+                return false;
+            }
+        }
 
         //ADD MORE FUNCTIONS HERE TO FETCH DATA FROM THE SERVER
         //AND SEND DATA TO THE SERVER AS NEEDED
