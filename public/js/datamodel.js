@@ -69,7 +69,7 @@ const DataModel = (function () {
         },
 
         //function to get the goals of the user
-        getUserGoals: async function () {
+        getGoals: async function () {
             // Check if the token is set
             if (!token) {
                 console.error("Token is not set.");
@@ -91,7 +91,10 @@ const DataModel = (function () {
                     return null;
                 }
         
-                goals = await response.json();
+                const data = await response.json();
+                goals = data.goals
+                
+                console.log(goals)
                 return goals;  // Return the fetched goals
             } catch (error) {
                 console.error("Error in API call:", error);
@@ -109,7 +112,7 @@ const DataModel = (function () {
                 const response = await fetch('/api/goals', {
                     method: 'PUT',
                     headers: {
-                        'Authorization': `Bearer ${token}`,  // Ensure proper format
+                        'Authorization': token,  // Ensure proper format
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(goalData),

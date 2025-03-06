@@ -183,7 +183,7 @@ app.get('/api/goals', authenticateToken, async (req, res) => {
 
         const connection = await createConnection();
         const [rows] = await connection.execute(
-            'SELECT tertiary1, tertiary2, Sub1, Sub2, main_goal FROM my_table WHERE email = ?',
+            'SELECT tertiary1, tertiary2, Sub1, Sub2, main_goal FROM goal WHERE email = ?',
             [userEmail]
         );
 
@@ -217,7 +217,7 @@ app.put('/api/goals', authenticateToken, async (req, res) => {
         if (existingRows.length > 0) {
             // Update existing goals (null values included if explicitly provided)
             await connection.execute(
-                `UPDATE goals SET 
+                `UPDATE goal SET 
                     tertiary1 = ?,
                     tertiary2 = ?,
                     Sub1 = ?,
@@ -237,7 +237,7 @@ app.put('/api/goals', authenticateToken, async (req, res) => {
         } else {
             // Insert new goals (null allowed)
             await connection.execute(
-                `INSERT INTO goals (email, tertiary1, tertiary2, Sub1, Sub2, main_goal) 
+                `INSERT INTO goal (email, tertiary1, tertiary2, Sub1, Sub2, main_goal) 
                  VALUES (?, ?, ?, ?, ?, ?)`,
                 [email, tertiary1 || null, tertiary2 || null, Sub1 || null, Sub2 || null, main_goal || null]
             );
