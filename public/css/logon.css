@@ -7,11 +7,13 @@ body {
 
 .container {
     max-width: 400px;
-    margin: 5% auto;
+    margin: 0 auto;
     padding: 20px;
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    bottom: 10%;
 }
 
 h1 {
@@ -27,7 +29,7 @@ h1 {
 
 .tab-button {
     flex: 1;
-    padding: 10px 0;
+    padding: 10px;
     border: none;
     cursor: pointer;
     background-color: #ddd;
@@ -45,6 +47,7 @@ form {
 form.active-form {
     display: block;
 }
+
 
 label {
     display: block;

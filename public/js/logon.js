@@ -36,11 +36,8 @@ logonForm.addEventListener('submit', async (event) => {
         if (response.ok) {
             localStorage.setItem('jwtToken', result.token);
             window.location.href = '/dashboard';
-        } else if (response.status === 401) {
-            messageEl.textContent = 'Invalid email or password. Please try again.';
-            messageEl.classList.add('error');
         } else {
-            messageEl.textContent = result.message || 'An error occurred. Please try again.';
+            messageEl.textContent = 'Invalid email or password. Please try again.';
             messageEl.classList.add('error');
         }
     } catch (error) {
@@ -67,12 +64,6 @@ createAccountForm.addEventListener('submit', async (event) => {
         if (response.ok) {
             messageEl.textContent = 'Account created successfully! You can now log in.';
             messageEl.classList.add('success');
-            document.getElementById('login-email').value = email;
-            document.getElementById('login-password').value = password;
-            logonForm.classList.add('active-form');
-            createAccountForm.classList.remove('active-form');
-            loginTab.classList.add('active');
-            createAccountTab.classList.remove('active');
         } else {
             messageEl.textContent = result.message;
             messageEl.classList.add('error');

@@ -14,44 +14,41 @@
             align-items: center;
             position: relative;
             overflow: hidden;
+            flex-direction: column;
         }
         /* Quadrant background effect */
-        body::before {
-            content: "";
+        .top-left, .top-right, .bottom-left, .bottom-right {
             position: absolute;
             width: 50%;
             height: 50%;
-            background-color: #00AB9F;
-            top: 0;
-            left: 0;
         }
-        body::after {
-            content: "";
+        .top-left { background-color: #00AB9F; top: 0; left: 0; }
+        .top-right { background-color: #2E6DB4; top: 0; right: 0; }
+        .bottom-left { background-color: #DF0024; bottom: 0; left: 0; }
+        .bottom-right { background-color: #F3C300; bottom: 0; right: 0; }
+        
+        /* Labels for quadrants */
+        .quadrant-label {
             position: absolute;
-            width: 50%;
-            height: 50%;
-            background-color: #2E6DB4;
-            top: 0;
-            right: 0;
+            font-size: 1.5em;
+            font-weight: bold;
         }
-        .bottom-left {
+        .top-left .quadrant-label { color: black; top: 10%; left: 10%; }
+        .top-right .quadrant-label { color: white; top: 10%; right: 10%; }
+        .bottom-left .quadrant-label { color: white; bottom: 10%; left: 10%; }
+        .bottom-right .quadrant-label { color: black; bottom: 10%; right: 10%; }
+
+        /* Centered logo */
+        .logo {
             position: absolute;
-            width: 50%;
-            height: 50%;
-            background-color: #DF0024;
-            bottom: 0;
-            left: 0;
+            top: 40%;
+            transform: translateY(-50%);
+            z-index: 10;
         }
-        .bottom-right {
-            position: absolute;
-            width: 50%;
-            height: 50%;
-            background-color: #F3C300;
-            bottom: 0;
-            right: 0;
-        }
+        
         .container {
-            position: relative;
+            position: absolute;
+            bottom: 10%;
             background: rgba(255, 255, 255, 0.9);
             padding: 20px;
             border-radius: 10px;
@@ -60,27 +57,31 @@
     </style>
 </head>
 <body>
-    <div class="bottom-left"></div>
-    <div class="bottom-right"></div>
+    <div class="top-left"><span class="quadrant-label">Mental</span></div>
+    <div class="top-right"><span class="quadrant-label">Spiritual</span></div>
+    <div class="bottom-left"><span class="quadrant-label">Social</span></div>
+    <div class="bottom-right"><span class="quadrant-label">Physical</span></div>
+
+    <img src="logo.png" alt="FIT HUB Logo" class="logo">
+
     <div class="container">
-        <h1>Welcome to Node App</h1>
         <div class="tab">
-            <button class="tab-button active" id="login-tab">Logon</button>
+            <button class="tab-button active" id="login-tab">Log-in</button>
             <button class="tab-button" id="create-account-tab">Create Account</button>
         </div>
         <div id="form-container">
             <form id="logon-form" class="active-form">
-                <label for="login-email">Email:</label>
-                <input type="email" id="login-email" placeholder="Enter your email" required>
-                <label for="login-password">Password:</label>
-                <input type="password" id="login-password" placeholder="Enter your password" required>
-                <button type="submit" class="button">Logon</button>
+                <label for="login-email">Enter Email:</label>
+                <input type="email" id="login-email" required>
+                <label for="login-password">Enter Password:</label>
+                <input type="password" id="login-password" required>
+                <button type="submit" class="button">Log-in</button>
             </form>
             <form id="create-account-form">
-                <label for="create-email">Email:</label>
-                <input type="email" id="create-email" placeholder="Enter your email" required>
-                <label for="create-password">Password:</label>
-                <input type="password" id="create-password" placeholder="Create your password" required>
+                <label for="create-email">Enter Email:</label>
+                <input type="email" id="create-email" required>
+                <label for="create-password">Enter Password:</label>
+                <input type="password" id="create-password" required>
                 <button type="submit" class="button">Create Account</button>
             </form>
             <p id="message" class="message"></p>
