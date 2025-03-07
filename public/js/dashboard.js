@@ -87,29 +87,47 @@ function addTertiaryGoal(button) {
 }
 
 async function submitGoals() {
-
-    let mainGoal = document.getElementById("mainGoal").value.trim() || null;
+    let mainGoal = document.getElementById("mainGoal").value.trim();
     let subGoalElements = document.querySelectorAll(".sub-goal");
     let tertiaryGoalElements = document.querySelectorAll(".tertiary-goal");
 
-    let goals = {
-        main_goal: mainGoal,
-        Sub1: null,
-        Sub2: null,
-        tertiary1: null,
-        tertiary2: null
-    };
+    let goals = {};
+
+    // Add main goal only if the user provides input
+    if (mainGoal !== "") {
+        goals.main_goal = mainGoal;
+    } else {
+        goals.main_goal = null;
+    }
 
     subGoalElements.forEach((sub, index) => {
-        let subGoalText = sub.value.trim() || null;
-        let tertiaryGoalText = tertiaryGoalElements[index]?.value.trim() || null;
+        let subGoalText = sub.value.trim();
+        let tertiaryGoalText = tertiaryGoalElements[index]?.value.trim();
 
         if (index === 0) {
-            goals.Sub1 = subGoalText;
-            goals.tertiary1 = tertiaryGoalText;
+            if (subGoalText !== "") {
+                goals.Sub1 = subGoalText;
+            } else {
+                goals.Sub1 = null;
+            }
+
+            if (tertiaryGoalText !== "") {
+                goals.tertiary1 = tertiaryGoalText;
+            } else {
+                goals.tertiary1 = null;
+            }
         } else if (index === 1) {
-            goals.Sub2 = subGoalText;
-            goals.tertiary2 = tertiaryGoalText;
+            if (subGoalText !== "") {
+                goals.Sub2 = subGoalText;
+            } else {
+                goals.Sub2 = null;
+            }
+
+            if (tertiaryGoalText !== "") {
+                goals.tertiary2 = tertiaryGoalText;
+            } else {
+                goals.tertiary2 = null;
+            }
         }
     });
 
@@ -124,6 +142,7 @@ async function submitGoals() {
         alert("Failed to update goals. Check the console for errors.");
     }
 }
+
 
 
 async function loadSavedGoals() {
