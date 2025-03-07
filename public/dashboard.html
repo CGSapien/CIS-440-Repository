@@ -50,6 +50,8 @@
         <button id="logoutButton">Log Out</button>
     </div>
 
+
+
     <div class="button-container">
         <button class="button">Daily Journal</button>
         <button class="button">Training Plan</button>
@@ -57,21 +59,15 @@
         <button class="button">Meditation Help</button>
     </div>
 
-    <div class="container">
-        <h1>Users</h1>
-        <div class="user-list" id="userList"></div>
-        <button id="refreshButton">Refresh List</button>
-    </div>
-
     <div class="modal-overlay" id="modalOverlay"></div>
     <div id="mindmapModal" class="modal">
         <h2>Mindmap Goals</h2>
         <label>Main Goal:</label>
         <input type="text" id="mainGoal"><br>
-        
+
         <button onclick="addSubGoal()" id="addSubGoalButton">Add Sub Goal</button>
         <div id="subGoals"></div>
-        
+
         <button onclick="closeModal()">Close</button>
         <button onclick="submitGoals()">Submit</button>
     </div>
@@ -82,6 +78,7 @@
         document.getElementById("mindmapButton").addEventListener("click", function() {
             document.getElementById("mindmapModal").style.display = "block";
             document.getElementById("modalOverlay").style.display = "block";
+            loadSavedGoals();
         });
 
         function closeModal() {
@@ -95,7 +92,7 @@
             
             let div = document.createElement("div");
             div.innerHTML = `<label>Sub Goal:</label>
-                             <input type='text'>
+                             <input type='text' class='sub-goal'>
                              <button onclick='addTertiaryGoal(this)'>Add Tertiary Goal</button>
                              <div class='tertiaryGoals'></div>`;
             document.getElementById("subGoals").appendChild(div);
@@ -103,31 +100,82 @@
 
         function addTertiaryGoal(button) {
             let parentDiv = button.nextElementSibling;
-            let tertiaryGoals = parentDiv.children.length;
-            if (tertiaryGoals >= 2) return;
+            if (parentDiv.children.length >= 1) return; // Limit to 1 tertiary goal per sub-goal
 
             let div = document.createElement("div");
             div.innerHTML = `<label>Tertiary Goal:</label>
-                             <input type='text'>
-                             <button onclick='addActionStep(this)'>Add Action Step</button>
-                             <div class='actionSteps'></div>`;
+                             <input type='text' class='tertiary-goal'>`;
             parentDiv.appendChild(div);
         }
 
-        function addActionStep(button) {
-            let parentDiv = button.nextElementSibling;
-            let actionSteps = parentDiv.children.length;
-            if (actionSteps >= 2) return;
+        async function submitGoals() {
+            let mainGoal = document.getElementById("mainGoal").value;
+            let subGoalElements = document.querySelectorAll(".sub-goal");
+            let tertiaryGoalElements = document.querySelectorAll(".tertiary-goal");
 
-            let div = document.createElement("div");
-            div.innerHTML = `<label>Action Step:</label>
-                             <input type='text'>`;
-            parentDiv.appendChild(div);
+            let goals = {
+                mainGoal: mainGoal,
+                subGoals: []
+            };
+
+            subGoalElements.forEach((sub, index) => {
+                let subGoalText = sub.value;
+                let tertiaryGoal = tertiaryGoalElements[index] ? tertiaryGoalElements[index].value : "";
+                
+                goals.subGoals.push({
+                    subGoal: subGoalText,
+                    tertiaryGoal: tertiaryGoal
+                });
+            });
+
+            try {
+                let response = await fetch('/api/saveGoals', {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(goals)
+                });
+
+                if (response.ok) {
+                    alert("Goals saved successfully!");
+                    closeModal();
+                } else {
+                    alert("Error saving goals.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
         }
 
-        function submitGoals() {
-            alert("Goals submitted!");
-            closeModal();
+        async function loadSavedGoals() {
+            try {
+                let response = await fetch('/api/getGoals');
+                if (!response.ok) return;
+
+                let data = await response.json();
+                document.getElementById("mainGoal").value = data.mainGoal || "";
+
+                let subGoalsContainer = document.getElementById("subGoals");
+                subGoalsContainer.innerHTML = ""; // Clear existing sub-goals
+
+                (data.subGoals || []).forEach(subGoalObj => {
+                    let div = document.createElement("div");
+                    div.innerHTML = `<label>Sub Goal:</label>
+                                     <input type='text' class='sub-goal' value='${subGoalObj.subGoal}'>
+                                     <button onclick='addTertiaryGoal(this)'>Add Tertiary Goal</button>
+                                     <div class='tertiaryGoals'>
+                                         <div>
+                                             <label>Tertiary Goal:</label>
+                                             <input type='text' class='tertiary-goal' value='${subGoalObj.tertiaryGoal || ""}'>
+                                         </div>
+                                     </div>`;
+                    subGoalsContainer.appendChild(div);
+                });
+
+            } catch (error) {
+                console.error("Error loading saved goals:", error);
+            }
         }
     </script>
 </body>
