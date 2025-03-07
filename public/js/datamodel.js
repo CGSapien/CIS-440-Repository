@@ -107,9 +107,13 @@ const DataModel = (function () {
                 console.error("Token is not set.");
                 return false; // Indicate failure
             }
+
+            console.log("📤 Sending request to /api/updategoals...");
+            console.log("🔍 Token:", token);
+            console.log("📨 Payload:", goalData);
     
             try {
-                const response = await fetch('/api/goals', {
+                const response = await fetch('/api/updategoals', {
                     method: 'PUT',
                     headers: {
                         'Authorization': token,  // Ensure proper format

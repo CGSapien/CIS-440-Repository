@@ -201,27 +201,31 @@ app.get('/api/goals', authenticateToken, async (req, res) => {
 });
 
 // add or updates goals
-app.put('/api/goals', authenticateToken, async (req, res) => {
+app.put('/api/updategoals', authenticateToken, async (req, res) => {
     try {
+        console.log("📥 Received request at /api/updategoals");
+        console.log("🔍 Request Body:", req.body);
+        console.log("🔍 User Email:", req.user.email);
+
         const { tertiary1, tertiary2, Sub1, Sub2, main_goal } = req.body;
         const email = req.user.email;
 
         const connection = await createConnection();
 
-        // Check if a record already exists for the user
         const [existingRows] = await connection.execute(
-            'SELECT email FROM goals WHERE email = ?',
+            'SELECT * FROM goal WHERE email = ?',
             [email]
         );
 
         if (existingRows.length > 0) {
-            // Update existing goals (null values included if explicitly provided)
+            console.log("📌 Updating existing goals for:", email);
+
             await connection.execute(
                 `UPDATE goal SET 
-                    tertiary1 = ?,
-                    tertiary2 = ?,
-                    Sub1 = ?,
-                    Sub2 = ?,
+                    tertiary1 = ?, 
+                    tertiary2 = ?, 
+                    Sub1 = ?, 
+                    Sub2 = ?, 
                     main_goal = ?
                  WHERE email = ?`,
                 [
@@ -235,7 +239,8 @@ app.put('/api/goals', authenticateToken, async (req, res) => {
             );
             res.status(200).json({ message: 'Goals updated successfully.' });
         } else {
-            // Insert new goals (null allowed)
+            console.log("📌 No existing goals found, inserting new record...");
+
             await connection.execute(
                 `INSERT INTO goal (email, tertiary1, tertiary2, Sub1, Sub2, main_goal) 
                  VALUES (?, ?, ?, ?, ?, ?)`,
@@ -246,10 +251,11 @@ app.put('/api/goals', authenticateToken, async (req, res) => {
 
         await connection.end();
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error updating goals.' });
+        console.error("❌ Server error:", error);
+        res.status(500).json({ message: 'Error updating goals.', error: error.message });
     }
 });
+
 
 
 //////////////////////////////////////
