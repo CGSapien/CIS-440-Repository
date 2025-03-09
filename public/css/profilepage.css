@@ -84,11 +84,16 @@ html, body {
 
 /* Button container centered in the middle of the page */
 .button-container {
-    display: 10px;
+    position: absolute;  /* Ensures absolute positioning */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centers it precisely */
+    display: flex;  /* Enables flexbox for content alignment */
     justify-content: center;
+    align-items: center;
     gap: 15px;
-    margin-top: 32vh; /* Adjusted to be centered vertically */
 }
+
 
 /* User List Container */
 .container {
@@ -106,6 +111,43 @@ html, body {
     display: block;
     margin: 15px auto 0;
 }
+
+/* Position goal list in the upper portion of the page */
+.goal-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers horizontally */
+    justify-content: flex-start; /* Aligns items to the top */
+    height: 30vh; /* Positions goals in the upper half */
+    gap: 20px; /* Space between sections */
+}
+
+/* General button styling */
+.goal-list button {
+    padding: 15px 30px; /* Bigger buttons */
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    border: 2px solid gray;
+    background-color: gray;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin: 10px; /* Adds space around buttons */
+}
+
+/* Sub-goals & Tertiary goals layout */
+.sub-goals-container {
+    display: flex;
+    justify-content: center;
+    gap: 60px; /* Space between buttons */
+}
+.tertiary-goal-container {
+    display: flex;
+    justify-content: center;
+    gap: 120px; /* Space between buttons */
+}
+
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -125,4 +167,5 @@ html, body {
         margin: 10px 0;
     }
 
+   
 }
