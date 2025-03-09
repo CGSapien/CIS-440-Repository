@@ -35,12 +35,14 @@ document.addEventListener('DOMContentLoaded', () => {
     //////////////////////////////////////////////////////
     //CODE THAT NEEDS TO RUN IMMEDIATELY AFTER PAGE LOADS
     //////////////////////////////////////////////////////
+
     // Initial check for the token
     const token = localStorage.getItem('jwtToken');
     if (!token) {
         window.location.href = '/';
     } else {
         DataModel.setToken(token);
+        loadSavedGoals()
     }
     //////////////////////////////////////////
     //END CODE THAT NEEDS TO RUN IMMEDIATELY AFTER PAGE LOADS
@@ -143,37 +145,66 @@ async function submitGoals() {
     }
 }
 
-
-
 async function loadSavedGoals() {
     try {
-        let response = DataModel.getGoals;
-        if (!response.ok) return;
+        let response = await DataModel.getGoals(); // Ensure it's awaited if it's an async function
+        
+        if (!response) return; // Ensure response exists
 
-        let data = await response.json();
-        document.getElementById("mainGoal").value = data.mainGoal || "";
+        // Update main goal button text
+        let mainGoalButton = document.getElementById("main-goal-node");
+        if (mainGoalButton) {
+            mainGoalButton.textContent = "Main goal: " + response.main_goal || "No Main Goal";
+        } 
 
-        let subGoalsContainer = document.getElementById("subGoals");
-        subGoalsContainer.innerHTML = ""; // Clear existing sub-goals
+        // Get sub-goals container and clear existing buttons
+        let subGoalsContainer = document.querySelector(".sub-goals-container");
+        subGoalsContainer.innerHTML = ""; 
 
-        (data.subGoals || []).forEach(subGoalObj => {
-            let div = document.createElement("div");
-            div.innerHTML = `<label>Sub Goal:</label>
-                             <input type='text' class='sub-goal' value='${subGoalObj.subGoal}'>
-                             <button onclick='addTertiaryGoal(this)'>Add Tertiary Goal</button>
-                             <div class='tertiaryGoals'>
-                                 <div>
-                                     <label>Tertiary Goal:</label>
-                                     <input type='text' class='tertiary-goal' value='${subGoalObj.tertiaryGoal || ""}'>
-                                 </div>
-                             </div>`;
-            subGoalsContainer.appendChild(div);
-        });
+        // Populate sub-goals if they exist
+        if (response.Sub1 || response.Sub2) {
+            if (response.Sub1) {
+                let subGoal1 = document.createElement("button");
+                subGoal1.className = "sub-goal-node";
+                subGoal1.id = "sub-goal-1";
+                subGoal1.textContent = "Sub goal: " + response.Sub1;
+                subGoalsContainer.appendChild(subGoal1);
+            }
+            if (response.Sub2) {
+                let subGoal2 = document.createElement("button");
+                subGoal2.className = "sub-goal-node";
+                subGoal2.id = "sub-goal-2";
+                subGoal2.textContent = "Sub goal: " + response.Sub2;
+                subGoalsContainer.appendChild(subGoal2);
+            }
+        }
+
+        // Get tertiary goals container and clear existing buttons
+        let tertiaryGoalsContainer = document.querySelector(".tertiary-goal-container");
+        tertiaryGoalsContainer.innerHTML = ""; 
+
+        // Populate tertiary goals if they exist
+        if (response.tertiary1) {
+            let tertiaryGoal1 = document.createElement("button");
+            tertiaryGoal1.className = "tertiary-goal-node";
+            tertiaryGoal1.id = "tertiary-goal-1";
+            tertiaryGoal1.textContent = "Tertiary goal: " + response.tertiary1;
+            tertiaryGoalsContainer.appendChild(tertiaryGoal1);
+        }
+        if (response.tertiary2) {
+            let tertiaryGoal2 = document.createElement("button");
+            tertiaryGoal2.className = "tertiary-goal-node";
+            tertiaryGoal2.id = "tertiary-goal-2";
+            tertiaryGoal2.textContent = "Tertiary goal: " + response.tertiary2;
+            tertiaryGoalsContainer.appendChild(tertiaryGoal2);
+        }
 
     } catch (error) {
         console.error("Error loading saved goals:", error);
     }
 }
+
+
 //////////////////////////////////////////
 //END FUNCTIONS TO MANIPULATE THE DOM
 //////////////////////////////////////////
