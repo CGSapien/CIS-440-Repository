@@ -140,6 +140,7 @@ async function submitGoals() {
 
     if (success) {
         alert("Goals updated successfully!");
+        loadSavedGoals()
     } else {
         alert("Failed to update goals. Check the console for errors.");
     }
