@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile Dashboard</title>
     <link rel="stylesheet" href="css/profilepage.css">
+    <link rel="stylesheet" href="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.css" />
+    
     <style>
         body { font-family: Impact, sans-serif; }
         .modal {
@@ -38,57 +40,65 @@
 </head>
 <body>
 
-    <div class="background-container">
-        <div class="quadrant top-left"></div>
-        <div class="quadrant top-right"></div>
-        <div class="quadrant bottom-left"></div>
-        <div class="quadrant bottom-right"></div>
+   <div class="background-container">
+       <div class="quadrant top-left"></div>
+       <div class="quadrant top-right"></div>
+       <div class="quadrant bottom-left"></div>
+       <div class="quadrant bottom-right"></div>
+   </div>
+
+   <div class="header">
+       <img src="logo.png" alt="Fit Hub Logo" class="logo">
+       <button class="mindmap-button" id="mindmapButton">Mindmap</button>
+       <button id="logoutButton">Log Out</button>
+   </div>
+
+   <div class="goal-list">
+       <button class="main-goal-node" id="main-goal-node">Main Goal</button>
+       <div class="sub-goals-container">
+           <button class="sub-goal-node" id="sub-goal-1">Sub Goal 1</button>
+           <button class="sub-goal-node" id="sub-goal-2">Sub Goal 2</button>
+       </div>
+       <div class="tertiary-goal-container">
+           <button class="tertiary-goal-node" id="tertiary-goal-1">Tertiary Goal 1</button>
+           <button class="tertiary-goal-node" id="tertiary-goal-2">Tertiary Goal 2</button>
+       </div>
+   </div>
+
+   <div class="button-container">
+       <button class="button">Daily Journal</button>
+       <button class="button">Training Plan</button>
+       <button class="button">Nutrition Plan</button>
+       <button class="button">Meditation Help</button>
+   </div>
+
+   <!-- Calendar Container -->
+   <div id="calendar" style="height: 800px;"></div>
+   
+   <div class="calendar-header">
+    <button id="prevMonth">◀</button>
+    <span id="currentMonth"></span>
+    <button id="nextMonth">▶</button>
     </div>
 
-    <div class="header">
-        <img src="logo.png" alt="Fit Hub Logo" class="logo">
-        <button class="mindmap-button" id="mindmapButton">Mindmap</button>
-        <button id="logoutButton">Log Out</button>
-    </div>
+   <div class="modal-overlay" id="modalOverlay"></div>
+   <div id="mindmapModal" class="modal">
+       <h2>Mindmap Goals</h2>
+       <label>Main Goal:</label>
+       <input type="text" id="mainGoal"><br>
+       <button onclick="addSubGoal()" id="addSubGoalButton">Add Sub Goal</button>
+       <div id="subGoals"></div>
+       <button onclick="closeModal()">Close</button>
+       <button onclick="submitGoals()">Submit</button>
+   </div>
 
- 
-    
-    <div class="goal-list">
-        <button class="main-goal-node" id="main-goal-node">Main Goal</button>
-    
-        <div class="sub-goals-container">
-            <button class="sub-goal-node" id="sub-goal-1">Sub Goal 1</button>
-            <button class="sub-goal-node" id="sub-goal-2">Sub Goal 2</button>
-        </div>
-    
-        <div class="tertiary-goal-container">
-            <button class="tertiary-goal-node" id="tertiary-goal-1">Tertiary Goal 1</button>
-            <button class="tertiary-goal-node" id="tertiary-goal-2">Tertiary Goal 2</button>
-        </div>
-    </div>
-        
+   <!-- Toast UI Calendar JS from CDN -->
+   <script src="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.js" defer></script>
+   
+   <!-- Your Custom JS Files -->
+   <script src="/js/dashboard.js" defer></script>
+   <script src="/js/datamodel.js" defer></script>
+   <script src="/js/calendar.js" defer></script>
 
-    <div class="button-container">
-        <button class="button">Daily Journal</button>
-        <button class="button">Training Plan</button>
-        <button class="button">Nutrition Plan</button>
-        <button class="button">Meditation Help</button>
-    </div>
-
-    <div class="modal-overlay" id="modalOverlay"></div>
-    <div id="mindmapModal" class="modal">
-        <h2>Mindmap Goals</h2>
-        <label>Main Goal:</label>
-        <input type="text" id="mainGoal"><br>
-
-        <button onclick="addSubGoal()" id="addSubGoalButton">Add Sub Goal</button>
-        <div id="subGoals"></div>
-
-        <button onclick="closeModal()">Close</button>
-        <button onclick="submitGoals()">Submit</button>
-    </div>
-    <script src="/js/dashboard.js"></script>
-    <script src="/js/datamodel.js"></script>
-    
 </body>
 </html>

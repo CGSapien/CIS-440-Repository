@@ -1,14 +1,13 @@
-/* Ensure full-page layout */
+ /* Ensure full-page layout */
 html, body {
     height: 100%;
     margin: 0;
     padding: 0;
     overflow: hidden;
     font-family: Arial, sans-serif;
-}
-
-/* Background container for quadrants */
-.background-container {
+ }
+ /* Background container for quadrants */
+ .background-container {
     position: fixed;
     width: 100vw;
     height: 100vh;
@@ -18,56 +17,47 @@ html, body {
     top: 0;
     left: 0;
     z-index: -1; /* Ensures it stays in the background */
-}
-
-/* Quadrants */
-.quadrant {
+ }
+ /* Quadrants */
+ .quadrant {
     width: 100%;
     height: 100%;
-}
-
-.top-left { background-color: #00ac9f; }
-.top-right { background-color: #2e6db4; }
-.bottom-left { background-color: #df0024; }
-.bottom-right { background-color: #f3c300; }
-
-/* Main UI elements stay above background */
-.header, .button-container, .container {
+ }
+ .top-left { background-color: #00ac9f; }
+ .top-right { background-color: #2e6db4; }
+ .bottom-left { background-color: #df0024; }
+ .bottom-right { background-color: #f3c300; }
+ /* Main UI elements stay above background */
+ .header, .button-container, .container, .goal-list, #calendar {
     position: relative;
     z-index: 1;
     text-align: center;
-}
-
-/* Header styling */
-.header {
+ }
+ /* Header styling */
+ .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 15px 20px;
-    
     color: white;
-}
-
-/* Centered mindmap button */
-.header .mindmap-button {
+ }
+ /* Centered mindmap button */
+ .header .mindmap-button {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-}
-
-/* Logout button aligned to the right */
-.header #logoutButton {
+ }
+ /* Logout button aligned to the right */
+ .header #logoutButton {
     margin-left: auto;
-}
-
-.logo {
+ }
+ .logo {
     transform: scale(0.5, 0.5);
     -ms-transform: scale(0.5, 0.5);
-    -webkit-transform: scale(0.5, 0.5)
-}
-
-/* Style for all buttons */
-.button, .mindmap-button, #logoutButton, #refreshButton {
+    -webkit-transform: scale(0.5, 0.5);
+ }
+ /* Style for all buttons */
+ .button, .mindmap-button, #logoutButton, #refreshButton {
     background-color: gray;
     color: white;
     border: none;
@@ -76,27 +66,20 @@ html, body {
     cursor: pointer;
     border-radius: 5px;
     transition: background 0.3s ease-in-out;
-}
-
-.button:hover, .mindmap-button:hover, #logoutButton:hover, #refreshButton:hover {
+ }
+ .button:hover, .mindmap-button:hover, #logoutButton:hover, #refreshButton:hover {
     background-color: darkgray;
-}
-
-/* Button container centered in the middle of the page */
-.button-container {
-    position: absolute;  /* Ensures absolute positioning */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* Centers it precisely */
-    display: flex;  /* Enables flexbox for content alignment */
+ }
+ /* Button container positioned at the top */
+ .button-container {
+    display: flex;
     justify-content: center;
     align-items: center;
     gap: 15px;
-}
-
-
-/* User List Container */
-.container {
+    margin-top: 20px; /* Add space between header and buttons */
+ }
+ /* User List Container */
+ .container {
     background: rgba(255, 255, 255, 0.9);
     padding: 20px;
     border-radius: 10px;
@@ -104,26 +87,24 @@ html, body {
     width: 80%;
     max-width: 500px;
     margin: 30px auto;
-}
-
-/* Refresh List Button inside User List */
-#refreshButton {
+ }
+ /* Refresh List Button inside User List */
+ #refreshButton {
     display: block;
     margin: 15px auto 0;
-}
-
-/* Position goal list in the upper portion of the page */
-.goal-list {
+ }
+ /* Position goal list in the upper portion of the page */
+ .goal-list {
     display: flex;
     flex-direction: column;
     align-items: center; /* Centers horizontally */
     justify-content: flex-start; /* Aligns items to the top */
     height: 30vh; /* Positions goals in the upper half */
     gap: 20px; /* Space between sections */
-}
-
-/* General button styling */
-.goal-list button {
+    margin-top: 20px; /* Add spacing below header */
+ }
+ /* General button styling */
+ .goal-list button {
     padding: 15px 30px; /* Bigger buttons */
     font-size: 18px;
     font-weight: bold;
@@ -134,38 +115,91 @@ html, body {
     cursor: pointer;
     transition: background 0.3s ease;
     margin: 10px; /* Adds space around buttons */
-}
-
-/* Sub-goals & Tertiary goals layout */
-.sub-goals-container {
+ }
+ /* Sub-goals & Tertiary goals layout */
+ .sub-goals-container {
     display: flex;
     justify-content: center;
     gap: 60px; /* Space between buttons */
-}
-.tertiary-goal-container {
+ }
+ .tertiary-goal-container {
     display: flex;
     justify-content: center;
     gap: 120px; /* Space between buttons */
+ }
+ 
+/* Calendar Styling */
+#calendar {
+    margin-top: 50px; /* Pushes calendar below buttons */
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative; /* Ensures positioning control */
 }
 
+/* Calendar Header */
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f5f5f5;
+    padding: 10px 15px;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
 
-/* Responsive Design */
-@media (max-width: 768px) {
+/* Calendar Navigation Controls */
+.calendar-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Navigation Buttons */
+.calendar-nav-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s ease-in-out;
+}
+
+.calendar-nav-button:hover {
+    background-color: #0056b3;
+}
+
+/* Calendar Month Title */
+.calendar-month-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    flex-grow: 1;
+}
+
+ /* Responsive Design */
+ @media (max-width: 768px) {
     .background-container {
         grid-template-columns: 1fr;
         grid-template-rows: repeat(4, 1fr);
     }
-
     .header {
         flex-direction: column;
         align-items: center;
     }
-
     .header .mindmap-button {
         position: static;
         transform: none;
         margin: 10px 0;
     }
-
-   
-}
+ }
+ 
