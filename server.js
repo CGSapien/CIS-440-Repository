@@ -123,6 +123,7 @@ app.post('/api/login', async (req, res) => {
    }
 });
 
+
 // Route to get user's goals
 app.get('/api/goals', authenticateToken, async (req, res) => {
    try {
@@ -197,6 +198,103 @@ app.put('/api/updategoals', authenticateToken, async (req, res) => {
        console.error("❌ Server error:", error);
        res.status(500).json({ message: 'Error updating goals.', error: error.message });
    }
+});
+
+//feature 2 
+//get events for user
+app.get('/api/events', authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user.email; // Using email as user_id reference
+
+        const connection = await createConnection();
+        const [rows] = await connection.execute(
+            'SELECT event_id, title, start, end, notes FROM events WHERE user_id = ?',
+            [userId]
+        );
+
+        await connection.end();
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: 'No events found for this user.' });
+        }
+
+        res.status(200).json({ events: rows });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error retrieving events.', error: error.message });
+    }
+});
+
+// UPDATE an Event 
+app.put('/api/events/:event_id', authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user.email;
+        const eventId = req.params.event_id;
+        const { title, start, end, notes } = req.body;
+
+        const connection = await createConnection();
+
+        // Check if the event belongs to the user
+        const [existingEvent] = await connection.execute(
+            'SELECT * FROM events WHERE event_id = ? AND user_id = ?',
+            [eventId, userId]
+        );
+
+        if (existingEvent.length === 0) {
+            await connection.end();
+            return res.status(403).json({ message: 'Unauthorized or event not found.' });
+        }
+
+        // Update the event with provided fields
+        await connection.execute(
+            `UPDATE events SET 
+                title = COALESCE(?, title),
+                start = COALESCE(?, start),
+                end = COALESCE(?, end),
+                notes = COALESCE(?, notes)
+            WHERE event_id = ? AND user_id = ?`,
+            [title, start, end, notes, eventId, userId]
+        );
+
+        await connection.end();
+        res.status(200).json({ message: 'Event updated successfully.' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error updating event.', error: error.message });
+    }
+});
+
+// DELETE an Event 
+app.delete('/api/events/:event_id', authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user.email;
+        const eventId = req.params.event_id;
+
+        const connection = await createConnection();
+
+        // Check if the event exists and belongs to the user
+        const [existingEvent] = await connection.execute(
+            'SELECT * FROM events WHERE event_id = ? AND user_id = ?',
+            [eventId, userId]
+        );
+
+        if (existingEvent.length === 0) {
+            await connection.end();
+            return res.status(403).json({ message: 'Unauthorized or event not found.' });
+        }
+
+        // Delete the event
+        await connection.execute(
+            'DELETE FROM events WHERE event_id = ? AND user_id = ?',
+            [eventId, userId]
+        );
+
+        await connection.end();
+        res.status(200).json({ message: 'Event deleted successfully.' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error deleting event.', error: error.message });
+    }
 });
 
 // Start the server
