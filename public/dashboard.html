@@ -66,7 +66,7 @@
    </div>
 
    <div class="button-container">
-       <button class="button">Daily Journal</button>
+       <button class="button" id="dailyJournalButton">Daily Journal</button>
        <button class="button">Training Plan</button>
        <button class="button">Nutrition Plan</button>
        <button class="button">Meditation Help</button>
@@ -92,6 +92,21 @@
        <button onclick="submitGoals()">Submit</button>
    </div>
 
+   
+   <div class="modal-overlay" id="modalOverlay"></div>
+   <div id="eventModal" class="modal">
+       <h2>Create New Event</h2>
+       <label>Title:</label>
+       <input type="text" id="eventTitle"><br>
+       <label>Start Date:</label>
+       <input type="datetime-local" id="eventStart"><br>
+       <label>End Date:</label>
+       <input type="datetime-local" id="eventEnd"><br>
+       <label>Notes:</label>
+       <textarea id="eventNotes"></textarea><br>
+       <button onclick="saveEvent()">Save Event</button>
+       <button onclick="closeEventModal()">Cancel</button>
+   </div>
    <!-- Toast UI Calendar JS from CDN -->
    <script src="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.js" defer></script>
    

@@ -69,4 +69,42 @@ document.addEventListener('DOMContentLoaded', function () {
     ]);
 
     console.log("Calendar initialized successfully.");
+
+    document.getElementById('dailyJournalButton').addEventListener('click', function() {
+        document.getElementById('modalOverlay').style.display = 'block';
+        document.getElementById('eventModal').style.display = 'block';
+    });
+    
+    function closeEventModal() {
+        document.getElementById('modalOverlay').style.display = 'none';
+        document.getElementById('eventModal').style.display = 'none';
+    }
+    
+    function saveEvent() {
+        const title = document.getElementById('eventTitle').value;
+        const start = document.getElementById('eventStart').value;
+        const end = document.getElementById('eventEnd').value;
+        const notes = document.getElementById('eventNotes').value;
+        
+        const eventData = {
+            user_id: 1, // Replace with actual user ID 
+            calendar_id: 1, 
+            title: title,
+            start: start,
+            end: end,
+            notes: notes
+        };
+        
+        fetch('/api/saveEvent', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(eventData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Event saved:', data);
+            closeEventModal();
+        })
+        .catch(error => console.error('Error:', error));
+    }
 });
