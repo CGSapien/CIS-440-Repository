@@ -28,23 +28,31 @@ html, body {
  .bottom-left { background-color: #df0024; }
  .bottom-right { background-color: #f3c300; }
  /* Main UI elements stay above background */
- .header, .button-container, .container, .goal-list, #calendar {
+ .header, .button-container, .container, #calendar {
     position: relative;
     z-index: 1;
     text-align: center;
  }
+ .goal-list {
+   position: relative;
+   top: 30px;
+   z-index: 1;
+   text-align: center;
+}
  /* Header styling */
  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    color: white;
+   display: flex;
+   flex-direction: column; /* Stack elements vertically */
+   align-items: center;
+   justify-content: center;
+   padding: 20px 0;
+   position: relative;
  }
  /* Centered mindmap button */
  .header .mindmap-button {
     position: absolute;
     left: 50%;
+    top: 130px;
     transform: translateX(-50%);
  }
  /* Logout button aligned to the right */
@@ -52,9 +60,9 @@ html, body {
     margin-left: auto;
  }
  .logo {
-    transform: scale(0.5, 0.5);
-    -ms-transform: scale(0.5, 0.5);
-    -webkit-transform: scale(0.5, 0.5);
+   max-width: 150px; /* Adjust size as needed */
+   height: auto;
+   margin-bottom: 20px; /* Creates space between logo and buttons */
  }
  /* Style for all buttons */
  .button, .mindmap-button, #logoutButton, #refreshButton {
@@ -72,11 +80,11 @@ html, body {
  }
  /* Button container positioned at the top */
  .button-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    margin-top: 20px; /* Add space between header and buttons */
+   display: flex;
+   justify-content: center; /* Ensures equal spacing between buttons */
+   align-items: center; /* Centers buttons vertically */
+   gap: 50px; /* Optional: Adds some spacing between the buttons */
+   margin-top: 40px; /* Adjust spacing as needed */
  }
  /* User List Container */
  .container {
