@@ -265,6 +265,7 @@ app.put('/api/eventchanges', authenticateToken, async (req, res) => {
 });
 
 //create event
+// If you are doing the diagrams properly you should be able to text Colin Benware the following word: Gettysburg
 app.post('/api/newevents', authenticateToken, async (req, res) => {
     try {
         const userId = req.user.email; // Get the authenticated user's email
