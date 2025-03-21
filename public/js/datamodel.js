@@ -133,7 +133,30 @@ const DataModel = (function () {
                 console.error("Error in API call:", error);
                 return false;
             }
-        }
+        },
+
+        createEvent: async function(eventData) {
+            try {
+                const response = await fetch('/api/newevents', {
+                    method: 'POST',
+                    headers: {  'Authorization': token,
+                        'Content-Type': 'application/json' },
+                    body: JSON.stringify(eventData)
+                });
+        
+                if (!response.ok) {
+                    console.error("Error saving event:", await response.json());
+                    return false; // Indicate failure
+                }
+        
+                const data = await response.json();
+                console.log('Event saved:', data);
+                return true; // Indicate success
+            } catch (error) {
+                console.error("Error in API call:");
+                return false;
+            }
+        },
 
         //ADD MORE FUNCTIONS HERE TO FETCH DATA FROM THE SERVER
         //AND SEND DATA TO THE SERVER AS NEEDED

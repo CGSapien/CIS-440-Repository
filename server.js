@@ -226,7 +226,7 @@ app.get('/api/events', authenticateToken, async (req, res) => {
 });
 
 // UPDATE an Event 
-app.put('/api/events/:event_id', authenticateToken, async (req, res) => {
+app.put('/api/eventchanges', authenticateToken, async (req, res) => {
     try {
         const userId = req.user.email;
         const eventId = req.params.event_id;
@@ -261,6 +261,36 @@ app.put('/api/events/:event_id', authenticateToken, async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error updating event.', error: error.message });
+    }
+});
+
+//create event
+app.post('/api/newevents', authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user.email; // Get the authenticated user's email
+        const { calendar_id, title, start, end, notes } = req.body;
+
+        // Validate required fields
+        if (!calendar_id || !title || !start || !end) {
+            return res.status(400).json({ message: 'Missing required fields: calendar_id, title, start, end.' });
+        }
+
+        const connection = await createConnection();
+
+        // Insert new event
+        const [result] = await connection.execute(
+            `INSERT INTO events (user_id, calendar_id, title, start, end, notes) 
+             VALUES (?, ?, ?, ?, ?, ?)`,
+            [userId, calendar_id, title, start, end, notes || null]
+        );
+
+        await connection.end();
+
+        res.status(201).json({ message: 'Event created successfully.', event_id: result.insertId });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error creating event.', error: error.message });
     }
 });
 

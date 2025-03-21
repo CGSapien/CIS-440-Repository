@@ -74,37 +74,34 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('modalOverlay').style.display = 'block';
         document.getElementById('eventModal').style.display = 'block';
     });
-    
-    function closeEventModal() {
-        document.getElementById('modalOverlay').style.display = 'none';
-        document.getElementById('eventModal').style.display = 'none';
-    }
+
+    document.getElementById('saveEvent').addEventListener('click', function() {
+        saveEvent()
+    });
     
     function saveEvent() {
         const title = document.getElementById('eventTitle').value;
         const start = document.getElementById('eventStart').value;
         const end = document.getElementById('eventEnd').value;
         const notes = document.getElementById('eventNotes').value;
-        
+    
         const eventData = {
-            user_id: 1, // Replace with actual user ID 
-            calendar_id: 1, 
+            calendar_id: "daily_journal",
             title: title,
             start: start,
             end: end,
             notes: notes
         };
-        
-        fetch('/api/saveEvent', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(eventData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Event saved:', data);
-            closeEventModal();
-        })
-        .catch(error => console.error('Error:', error));
+    
+        DataModel.createEvent(eventData).then(success => {
+            if (success) {
+                closeEventModal();
+            }
+        });
+    }
+
+    function closeEventModal() {
+        document.getElementById('modalOverlay').style.display = 'none';
+        document.getElementById('eventModal').style.display = 'none';
     }
 });
