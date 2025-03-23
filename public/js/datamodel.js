@@ -157,7 +157,29 @@ const DataModel = (function () {
                 return false;
             }
         },
-
+        getEvents: async function() {
+            try {
+                const response = await fetch('/api/events', {
+                    method: 'GET',
+                    headers: {  
+                        'Authorization': token,
+                        'Content-Type': 'application/json'
+                    }
+                });
+        
+                if (!response.ok) {
+                    console.error("Error retrieving events:", await response.json());
+                    return null; // Indicate failure
+                }
+        
+                const data = await response.json();
+                console.log('Events retrieved:', data);
+                return data.events; // Return the events array
+            } catch (error) {
+                console.error("Error in API call:", error);
+                return null;
+            }
+        },
         //ADD MORE FUNCTIONS HERE TO FETCH DATA FROM THE SERVER
         //AND SEND DATA TO THE SERVER AS NEEDED
     };

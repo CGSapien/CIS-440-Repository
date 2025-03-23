@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
         defaultView: 'month',
         taskView: true,
         scheduleView: ['time'],
-        useCreationPopup: true,
+        useCreationPopup: false,
         useDetailPopup: true,
     });
 
@@ -56,17 +56,38 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initialize month title
     updateMonthTitle();
 
-    // Example: Add a test event
-    calendar.createEvents([
-        {
-            id: '1',
-            calendarId: '1',
-            title: 'Sample Event',
-            category: 'time',
-            start: '2025-03-12T10:00:00',
-            end: '2025-03-12T12:00:00',
-        },
-    ]);
+    // get events
+    async function fetchAndDisplayEvents() {
+        try {
+            const events = await DataModel.getEvents(); // Call API function
+            if (!events || events.length === 0) {
+                console.warn("No events to display.");
+                return;
+            }
+    
+            // Clear existing events before adding new ones
+            calendar.clear();
+    
+            // Format events for Toast UI Calendar
+            const formattedEvents = events.map(event => ({
+                id: event.event_id.toString(), // Ensure ID is a string
+                calendarId: event.calendar_id,
+                title: event.title,
+                category: 'All-Day',
+                start: event.start, // Ensure format is YYYY-MM-DDTHH:mm:ss
+                end: event.end,
+                body: event.notes || ''
+            }));
+    
+            // Add events to the calendar
+            calendar.createEvents(formattedEvents);
+        } catch (error) {
+            console.error("Error fetching events:", error);
+        }
+    }
+    
+    // Call `fetchAndDisplayEvents` when the calendar initializes
+    fetchAndDisplayEvents();
 
     console.log("Calendar initialized successfully.");
 
