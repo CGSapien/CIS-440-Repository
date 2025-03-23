@@ -119,6 +119,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 closeEventModal();
             }
         });
+        DataModel.deleteEvent(eventData).then(success => {
+            if (success) {
+                closeEventModal();
+            }
+        });
     }
 
     function closeEventModal() {
@@ -131,22 +136,22 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     
     function deleteEvent() {
-        const eventId = document.getElementById('eventId').value; 
-        if (!eventId) {
+        const event_id = document.getElementById('event_id').value; 
+        if (!event_id) {
             console.warn("No event ID found to delete.");
             return;
         }
     
         // Remove event from the calendar
-        calendar.deleteEvent(eventId); 
+        calendar.deleteEvent(event_id); 
     
         // Remove event from the database using DataModel API
-        DataModel.deleteEvent(eventId).then(success => {
+        DataModel.deleteEvent(event_id).then(success => {
             if (success) {
-                console.log(`Event with ID ${eventId} deleted successfully.`);
+                console.log(`Event with ID ${event_id} deleted successfully.`);
                 closeEventModal(); // Close the popup modal
             } else {
-                console.error(`Failed to delete event with ID ${eventId}.`);
+                console.error(`Failed to delete event with ID ${event_id}.`);
             }
         }).catch(error => {
             console.error("Error deleting event:", error);
