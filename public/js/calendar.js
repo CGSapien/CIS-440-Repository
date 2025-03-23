@@ -125,4 +125,32 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('modalOverlay').style.display = 'none';
         document.getElementById('eventModal').style.display = 'none';
     }
+
+    document.getElementById('deleteEvent').addEventListener('click', function () {
+        deleteEvent();
+    });
+    
+    // function deleteEvent() {
+    //     const eventId = document.getElementById('eventId').value; 
+    //     if (!eventId) {
+    //         console.warn("No event ID found to delete.");
+    //         return;
+    //     }
+    
+    //     // Remove event from the calendar
+    //     calendar.deleteEvent(eventId); 
+    
+    //     // Remove event from the database using DataModel API
+    //     DataModel.deleteEvent(eventId).then(success => {
+    //         if (success) {
+    //             console.log(`Event with ID ${eventId} deleted successfully.`);
+    //             closeEventModal(); // Close the popup modal
+    //         } else {
+    //             console.error(`Failed to delete event with ID ${eventId}.`);
+    //         }
+    //     }).catch(error => {
+    //         console.error("Error deleting event:", error);
+    //     });
+    // }
+    
 });
