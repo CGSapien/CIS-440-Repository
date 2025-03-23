@@ -6,7 +6,7 @@ This is a simple template to get you started creating a web app with a restful a
 - rename .env.example to .env and replace the placeholder values with your database credentials and a key of your choosing (share this information with your team so they can use the same credentials and key)
 - use mySQL Workbench to execute the DDL query found in the user_table_ddl.sql file against your database in order to create the user table needed for the template to run properly
 - run the template app from the terminal with: npm run dev
-- navigate to http://localhost:3000 to play with the app!
+- navigate to http://loacalhost:3000 to play with the app!
 
 ## Basic Architecture
 - **server.js:** back-end routes that talk to the database.

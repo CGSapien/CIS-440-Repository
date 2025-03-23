@@ -155,7 +155,6 @@ html, body {
     margin: 10 auto;
     transform: scale(0.45); /* You can adjust the scale factor as needed */
     transform-origin: center center; /* Keeps the calendar aligned to the top-left corner */
-    overflow: hidden;
 }
 
 /* Calendar Header */
