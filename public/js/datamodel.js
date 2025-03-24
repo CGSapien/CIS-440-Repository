@@ -180,6 +180,30 @@ const DataModel = (function () {
                 return null;
             }
         },
+
+        deleteEvent: async function(event_Id) {
+            try {
+                const response = await fetch(`/api/events/deleteEvent/${event_Id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': token
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.message || 'Failed to delete event.');
+                }
+                
+                return data;
+            } catch (error) {
+                console.error('Error:', error.message);
+                return { error: error.message };
+            }
+        },
+            
         //ADD MORE FUNCTIONS HERE TO FETCH DATA FROM THE SERVER
         //AND SEND DATA TO THE SERVER AS NEEDED
     };

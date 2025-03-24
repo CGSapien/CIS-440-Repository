@@ -296,12 +296,17 @@ app.post('/api/newevents', authenticateToken, async (req, res) => {
 });
 
 // DELETE an Event 
-app.delete('/api/events/:event_id', authenticateToken, async (req, res) => {
+app.delete('/api/events/deleteEvent/:event_id', authenticateToken, async (req, res) => {
+    let connection;
     try {
         const userId = req.user.email;
-        const eventId = req.params.event_id;
+        const eventId = req.params.event_id; // Fixed: Correctly accessing event_id from route parameters
 
-        const connection = await createConnection();
+        if (!eventId) {
+            return res.status(400).json({ message: 'Event ID is required.' });
+        }
+
+        connection = await createConnection();
 
         // Check if the event exists and belongs to the user
         const [existingEvent] = await connection.execute(
@@ -311,6 +316,8 @@ app.delete('/api/events/:event_id', authenticateToken, async (req, res) => {
 
         if (existingEvent.length === 0) {
             await connection.end();
+            console.log(eventId);
+            console.log(userId);
             return res.status(403).json({ message: 'Unauthorized or event not found.' });
         }
 
@@ -320,13 +327,13 @@ app.delete('/api/events/:event_id', authenticateToken, async (req, res) => {
             [eventId, userId]
         );
 
-        await connection.end();
         res.status(200).json({ message: 'Event deleted successfully.' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error deleting event.', error: error.message });
     }
 });
+
 
 // Start the server
 app.listen(port, () => {
