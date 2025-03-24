@@ -120,11 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
         DataModel.createEvent(eventData).then(success => {
             if (success) {
-                closeEventModal();
-            }
-        });
-        DataModel.deleteEvent(eventData).then(success => {
-            if (success) {
+                fetchAndDisplayEvents()
                 closeEventModal();
             }
         });
