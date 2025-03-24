@@ -136,6 +136,46 @@ html, body {
     gap: 120px; /* Space between buttons */
  }
  
+  /* General button styling - Cloud appearance
+.goal-list button {
+   padding: 20px 40px; /* Bigger buttons for a cloud effect */
+   /* font-size: 18px;
+   font-weight: bold;
+   background-color: #d3e9ff; /* Light blue for a cloud-like appearance */
+   /* color: #333;
+   border: none;
+   position: relative;
+   border-radius: 50px; /* Rounded shape */
+   /* box-shadow: 
+       10px 10px 0px rgba(0, 0, 0, 0.1), 
+       inset 5px 5px 10px rgba(255, 255, 255, 0.6);
+   cursor: pointer;
+   transition: all 0.3s ease;
+} */ 
+
+/* Adding fluffy cloud bubbles */
+/* .goal-list button::before,
+.goal-list button::after {
+   content: '';
+   position: absolute;
+   background-color: inherit;
+   border-radius: 50%;
+} */
+
+/* Sub-goals container */
+/* .sub-goals-container {
+   display: flex;
+   justify-content: center;
+   gap: 60px;
+} */ 
+
+/* Tertiary goals container
+.tertiary-goal-container {
+   display: flex;
+   justify-content: center;
+   gap: 120px;
+} */
+
 /* Calendar Styling */
 #calendar {
     margin-top: -200px; /* Pushes calendar below buttons */
