@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
         saveEvent()
     });
 
-    document.getElementById('saveEvent').addEventListener('click', function() {
+    document.getElementById('cancelEvent').addEventListener('click', function() {
         closeEventModal()
     });
     
