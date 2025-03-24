@@ -99,6 +99,10 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('saveEvent').addEventListener('click', function() {
         saveEvent()
     });
+
+    document.getElementById('saveEvent').addEventListener('click', function() {
+        closeEventModal()
+    });
     
     function saveEvent() {
         const title = document.getElementById('eventTitle').value;
@@ -130,32 +134,35 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('modalOverlay').style.display = 'none';
         document.getElementById('eventModal').style.display = 'none';
     }
-
-    document.getElementById('deleteEvent').addEventListener('click', function () {
-        deleteEvent();
-    });
     
-    function deleteEvent() {
-        const event_id = document.getElementById('event_id').value; 
-        if (!event_id) {
+    function deleteEvent(event) {
+        const eventId = event.id; 
+        const calendarId = event.calendarId; // Required for deletion in Toast UI Calendar
+    
+        if (!eventId) {
             console.warn("No event ID found to delete.");
             return;
         }
     
-        // Remove event from the calendar
-        calendar.deleteEvent(event_id); 
+        // Remove event from the calendar UI
+        calendar.deleteEvent(eventId, calendarId);
     
-        // Remove event from the database using DataModel API
-        DataModel.deleteEvent(event_id).then(success => {
-            if (success) {
-                console.log(`Event with ID ${event_id} deleted successfully.`);
-                closeEventModal(); // Close the popup modal
-            } else {
-                console.error(`Failed to delete event with ID ${event_id}.`);
-            }
-        }).catch(error => {
-            console.error("Error deleting event:", error);
-        });
+        // Remove event from the database
+        DataModel.deleteEvent(eventId)
+            .then(success => {
+                if (success) {
+                    console.log(`Event with ID ${eventId} deleted successfully.`);
+                    closeEventModal();
+                } else {
+                    console.error(`Failed to delete event with ID ${eventId}.`);
+                }
+            })
+            .catch(error => {
+                console.error("Error deleting event:", error);
+            });
     }
+    
+    // Bind this function to the delete event
+    calendar.on('beforeDeleteEvent', deleteEvent);
     
 });
