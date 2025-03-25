@@ -205,7 +205,29 @@ async function loadSavedGoals() {
     }
 }
 
+// ADD EXERCISE FUNCTIONS
+const maxExercises = 3;
 
+document.getElementById('trainingPlanButton').addEventListener('click', () => {
+    document.getElementById('trainingModal').style.display = 'block';
+    document.getElementById('trainingModalOverlay').style.display = 'block';
+});
+
+function closeTrainingModal() {
+    document.getElementById('trainingModal').style.display = 'none';
+    document.getElementById('trainingModalOverlay').style.display = 'none';
+}
+
+function addExercise(type) {
+    const section = document.getElementById(`${type}-section`);
+    const entries = section.querySelectorAll(`.${type}-entry`);
+
+    if (entries.length >= maxExercises) return;
+
+    const newEntry = entries[0].cloneNode(true);
+    newEntry.querySelectorAll('input').forEach(input => input.value = '');
+    section.insertBefore(newEntry, section.lastElementChild);
+}
 //////////////////////////////////////////
 //END FUNCTIONS TO MANIPULATE THE DOM
 //////////////////////////////////////////
