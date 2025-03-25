@@ -52,7 +52,7 @@ html, body {
  .header .mindmap-button {
     position: absolute;
     left: 50%;
-    top: 130px;
+    top: 50px;
     transform: translateX(-50%);
  }
  /* Logout button aligned to the right */
