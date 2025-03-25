@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Initialize the Toast UI calendar
     const calendar = new tui.Calendar(container, {
-        defaultView: 'month',
+        defaultView: 'week',
         taskView: true,
         scheduleView: ['time'],
         useCreationPopup: false,
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 id: event.event_id.toString(), // Ensure ID is a string
                 calendarId: event.calendar_id,
                 title: event.title,
-                category: 'All-Day',
+                category: event.event_type,
                 start: event.start, // Ensure format is YYYY-MM-DDTHH:mm:ss
                 end: event.end,
                 body: event.notes || ''
