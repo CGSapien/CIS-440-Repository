@@ -97,7 +97,8 @@
 
    
    <div class="modal-overlay" id="modalOverlay"></div>
-   <div id="eventModal" class="modal">
+   <div id="eventModal" class="modal" style="font-family: Arial;">
+       <strong>
        <h2>Create New Event</h2>
        <label>Title:</label>
        <input type="text" id="eventTitle"><br>
@@ -109,10 +110,12 @@
        <textarea id="eventNotes"></textarea><br>
        <button id="saveEvent">Save Event</button>
        <button id="cancelEvent">Cancel</button>
+       </strong>
    </div>
 
    <div class="modal-overlay" id="trainingModalOverlay"></div>
-   <div id="trainingModal" class="modal" style="width: 90%; max-width: 1000px;">
+   <div id="trainingModal" class="modal" style="width: 90%; max-width: 1000px; font-family: Arial;">
+       <strong>
        <h2>Create A Training Plan</h2>
        <h3>3 Exercises Each Max</h3>
        <form id="trainingPlanForm">
@@ -161,6 +164,7 @@
            <button type="submit">Save Plan</button>
            <button type="button" onclick="closeTrainingModal()">Cancel</button>
        </form>
+    </strong>
    </div>
 
    <!-- Toast UI Calendar JS from CDN -->
