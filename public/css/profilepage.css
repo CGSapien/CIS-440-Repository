@@ -5,6 +5,7 @@ html, body {
     padding: 0;
     overflow: hidden;
     font-family: Arial, sans-serif;
+    overflow-y: auto;
  }
  /* Background container for quadrants */
  .background-container {
@@ -185,24 +186,19 @@ html, body {
 
 /* Calendar Styling */
 #calendar {
-    margin-top: -200px; /* Pushes calendar below buttons */
-    padding: 20px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    margin-left: auto;
-    margin-right: auto;
-    position: relative; /* Ensures positioning control */
-    height: 800px;
-    overflow-y: auto;
-
-    width: 100%;
-    max-width: 90%;
-    max-height: 80vh;
-    margin: 10 auto;
-    transform: scale(0.45); /* You can adjust the scale factor as needed */
-    transform-origin: center center; /* Keeps the calendar aligned to the top-left corner */
-}
+   margin-top: 10%; /* Pushes calendar below buttons */
+   padding: 20px;
+   background: white;
+   border-radius: 10px;
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+   margin-left: auto;
+   margin-right: auto;
+   position: relative; /* Ensures positioning control */
+   height: 80vh; /* Increase height dynamically */
+   width: 90vw; /* Make calendar wider */
+   max-width: 1200px; /* Ensure it doesn't get too large on big screens */
+   overflow-y: auto;
+   transform: none; /* Removes scaling */
 
 /* Calendar Header */
 .calendar-header {
