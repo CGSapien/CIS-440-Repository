@@ -8,10 +8,17 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initialize the Toast UI calendar
     const calendar = new tui.Calendar(container, {
         defaultView: 'week',
-        taskView: true,
         scheduleView: ['time'],
         useCreationPopup: false,
         useDetailPopup: true,
+
+        week: {
+            taskView: ['task'],
+            eventView: true,
+            timeGridInterval: 60,
+            hourStart: 5,  // Start from 5 AM
+            hourEnd: 23 , // End at 11pm
+          },
     });
 
     // Function to update the displayed month
