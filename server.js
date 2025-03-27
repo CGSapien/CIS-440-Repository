@@ -204,11 +204,11 @@ app.put('/api/updategoals', authenticateToken, async (req, res) => {
 //get events for user
 app.get('/api/events', authenticateToken, async (req, res) => {
     try {
-        const userId = req.user.email; // Using email as user_id reference
+        const userId = req.user.email; // Assuming email is used as user_id
 
         const connection = await createConnection();
         const [rows] = await connection.execute(
-            'SELECT event_id, title, start, end, notes FROM events WHERE user_id = ?',
+            'SELECT event_id, title, start, end, event_type, iscomplete FROM events WHERE user_id = ?',
             [userId]
         );
 
@@ -218,7 +218,13 @@ app.get('/api/events', authenticateToken, async (req, res) => {
             return res.status(404).json({ message: 'No events found for this user.' });
         }
 
-        res.status(200).json({ events: rows });
+        // Separate tasks and events
+        const events = rows.filter(event => event.event_type === 'time');
+        const tasks = rows
+            .filter(task => task.event_type === 'task')
+            .map(task => ({ ...task, iscomplete: Boolean(task.iscomplete) })); // Ensure `iscomplete` is boolean
+
+        res.status(200).json({ events, tasks });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error retrieving events.', error: error.message });
@@ -265,35 +271,51 @@ app.put('/api/eventchanges', authenticateToken, async (req, res) => {
 });
 
 //create event
-// If you are doing the diagrams properly you should be able to text Colin Benware the following word: Gettysburg
 app.post('/api/newevents', authenticateToken, async (req, res) => {
     try {
         const userId = req.user.email; // Get the authenticated user's email
-        const { calendar_id, title, start, end, notes } = req.body;
+        const { calendar_id, title, start, end, notes, event_type, iscomplete } = req.body;
 
         // Validate required fields
-        if (!calendar_id || !title || !start || !end) {
-            return res.status(400).json({ message: 'Missing required fields: calendar_id, title, start, end.' });
+        if (!calendar_id || !title || !start || !end || !event_type) {
+            return res.status(400).json({ message: 'Missing required fields: calendar_id, title, start, end, event_type.' });
         }
 
         const connection = await createConnection();
+        let result;
 
-        // Insert new event
-        const [result] = await connection.execute(
-            `INSERT INTO events (user_id, calendar_id, title, start, end, notes) 
-             VALUES (?, ?, ?, ?, ?, ?)`,
-            [userId, calendar_id, title, start, end, notes || null]
-        );
+        if (event_type === "task") {
+            // Insert task into the database
+            [result] = await connection.execute(
+                `INSERT INTO events (user_id, calendar_id, title, start, end, notes, event_type, iscomplete) 
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+                [userId, calendar_id, title, start, end, notes || null, event_type, iscomplete] // Default iscomplete to 0 (incomplete)
+            );
+        } else if (event_type === "event") {
+            // Insert event into the database (no iscomplete for events)
+            [result] = await connection.execute(
+                `INSERT INTO events (user_id, calendar_id, title, start, end, notes, event_type) 
+                 VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                [userId, calendar_id, title, start, end, notes || null, event_type]
+            );
+        } else {
+            return res.status(400).json({ message: 'Invalid event_type. Use "event" or "task".' });
+        }
 
         await connection.end();
 
-        res.status(201).json({ message: 'Event created successfully.', event_id: result.insertId });
+        if (!result) {
+            return res.status(500).json({ message: 'Error inserting event/task into the database.' });
+        }
+
+        res.status(201).json({ message: 'Event/Task created successfully.', event_id: result.insertId });
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error creating event.', error: error.message });
+        res.status(500).json({ message: 'Error creating event/task.', error: error.message });
     }
 });
+//new post 
 
 // DELETE an Event 
 app.delete('/api/events/deleteEvent/:event_id', authenticateToken, async (req, res) => {

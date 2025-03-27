@@ -137,10 +137,17 @@ const DataModel = (function () {
 
         createEvent: async function(eventData) {
             try {
+                // Ensure tasks have the iscomplete field
+                if (eventData.event_type === "task" && eventData.iscomplete === undefined) {
+                    eventData.iscomplete = 0; // Default to incomplete
+                }
+        
                 const response = await fetch('/api/newevents', {
                     method: 'POST',
-                    headers: {  'Authorization': token,
-                        'Content-Type': 'application/json' },
+                    headers: {  
+                        'Authorization': token,
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify(eventData)
                 });
         
@@ -153,11 +160,12 @@ const DataModel = (function () {
                 console.log('Event saved:', data);
                 return true; // Indicate success
             } catch (error) {
-                console.error("Error in API call:");
+                console.error("Error in API call:", error);
                 return false;
             }
         },
         getEvents: async function() {
+
             try {
                 const response = await fetch('/api/events', {
                     method: 'GET',
@@ -173,8 +181,9 @@ const DataModel = (function () {
                 }
         
                 const data = await response.json();
-                console.log('Events retrieved:', data);
-                return data.events; // Return the events array
+                console.log('Events and Tasks retrieved:', data);
+        
+                return data; // Return the full response (both events and tasks)
             } catch (error) {
                 console.error("Error in API call:", error);
                 return null;

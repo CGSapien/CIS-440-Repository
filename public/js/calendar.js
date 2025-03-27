@@ -66,30 +66,42 @@ document.addEventListener('DOMContentLoaded', function () {
     // get events
     async function fetchAndDisplayEvents() {
         try {
-            const events = await DataModel.getEvents(); // Call API function
-            if (!events || events.length === 0) {
-                console.warn("No events to display.");
+            const data = await DataModel.getEvents(); // Call API function
+            if (!data || (!data.events.length && !data.tasks.length)) {
+                console.warn("No events or tasks to display.");
                 return;
             }
     
             // Clear existing events before adding new ones
             calendar.clear();
     
-            // Format events for Toast UI Calendar
-            const formattedEvents = events.map(event => ({
+            // Format events
+            const formattedEvents = data.events.map(event => ({
                 id: event.event_id.toString(), // Ensure ID is a string
-                calendarId: event.calendar_id,
+                calendarId: "events", // Assign a calendar category
                 title: event.title,
-                category: event.event_type,
+                category: "time", // Events are time-based
                 start: event.start, // Ensure format is YYYY-MM-DDTHH:mm:ss
                 end: event.end,
                 body: event.notes || ''
             }));
     
-            // Add events to the calendar
-            calendar.createEvents(formattedEvents);
+            // Format tasks (mark completed tasks differently)
+            const formattedTasks = data.tasks.map(task => ({
+                id: task.event_id,
+                calendarId: task.calendar_id, // Assign a calendar category
+                title: task.title , // Append checkmark if complete
+                category: task.event_type, // Differentiate tasks
+                start: task.start, // Some tasks may have a due date
+                end: task.end,
+                body: task.notes || '',
+                backgroundColor: task.iscomplete ? '#90EE90' : '#FF6347'
+            }));
+    
+            // Add both events and tasks to the calendar
+            calendar.createEvents([...formattedEvents, ...formattedTasks]);
         } catch (error) {
-            console.error("Error fetching events:", error);
+            console.error("Error fetching and displaying events:", error);
         }
     }
     

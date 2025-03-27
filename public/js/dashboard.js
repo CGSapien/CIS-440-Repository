@@ -228,6 +228,67 @@ function addExercise(type) {
     newEntry.querySelectorAll('input').forEach(input => input.value = '');
     section.insertBefore(newEntry, section.lastElementChild);
 }
+
+document.getElementById("trainingPlanForm").addEventListener("submit", async function (event) {
+    event.preventDefault(); // Prevent page reload
+    await submitTrainingPlan();
+});
+
+async function submitTrainingPlan() {
+    try {
+        const startTime = document.querySelector('input[name="startTime"]').value;
+        const endTime = document.querySelector('input[name="endTime"]').value;
+
+        if (!startTime || !endTime) {
+            console.error("Start and End times are required.");
+            return;
+        }
+
+        function getExercises(type) {
+            return Array.from(document.querySelectorAll(`#${type}-section .${type}-entry`)).map(entry => {
+                const name = entry.querySelector(`input[name="${type}Name[]"]`).value.trim();
+                if (!name) return null; // Skip empty entries
+
+                return {
+                    calendar_id: "excersise",
+                    title: name, // Exercise name becomes the title
+                    start: startTime,
+                    end: endTime,
+                    event_type: "task",
+                    iscomplete: 0, // Default to incomplete
+                    notes: `Sets: ${entry.querySelector(`input[name="${type}Sets[]"]`).value || 'N/A'} | ` +
+                           `Reps: ${entry.querySelector(`input[name="${type}Reps[]"]`).value || 'N/A'} | ` +
+                           `Load: ${entry.querySelector(`input[name="${type}Load[]"]`).value || 'N/A'} | ` +
+                           `Notes: ${entry.querySelector(`input[name="${type}Notes[]"]`).value || 'None'}`
+                };
+            }).filter(exercise => exercise !== null); // Remove null values
+        }
+
+        // Gather all exercises separately
+        const warmups = getExercises('warmup');
+        const exercises = getExercises('exercise');
+        const flexibility = getExercises('flexibility');
+
+        // Combine all tasks into one array
+        const trainingTasks = [...warmups, ...exercises, ...flexibility];
+
+        console.log("Final Training Plan Data:", trainingTasks);
+
+        // **Send each task to the API**
+        for (const task of trainingTasks) {
+            const success = await DataModel.createEvent(task);
+            if (!success) {
+                console.error("Failed to save task:", task);
+            }
+        }
+
+        console.log("Training plan submitted successfully!");
+        closeTrainingModal(); // Close modal after submission
+    } catch (error) {
+        console.error("Error submitting training plan:", error);
+    }
+}
+
 //////////////////////////////////////////
 //END FUNCTIONS TO MANIPULATE THE DOM
 //////////////////////////////////////////
