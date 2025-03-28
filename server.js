@@ -277,8 +277,10 @@ app.post('/api/newevents', authenticateToken, async (req, res) => {
         const { calendar_id, title, start, end, notes, event_type, iscomplete } = req.body;
 
         // Validate required fields
-        if (!calendar_id || !title || !start || !end || !event_type) {
+        if (!calendar_id || !title || !start || !end ) {
+            console.log(req.body)
             return res.status(400).json({ message: 'Missing required fields: calendar_id, title, start, end, event_type.' });
+
         }
 
         const connection = await createConnection();
@@ -291,7 +293,7 @@ app.post('/api/newevents', authenticateToken, async (req, res) => {
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
                 [userId, calendar_id, title, start, end, notes || null, event_type, iscomplete] // Default iscomplete to 0 (incomplete)
             );
-        } else if (event_type === "event") {
+        } else if (event_type === "time") {
             // Insert event into the database (no iscomplete for events)
             [result] = await connection.execute(
                 `INSERT INTO events (user_id, calendar_id, title, start, end, notes, event_type) 

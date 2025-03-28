@@ -134,7 +134,8 @@ document.addEventListener('DOMContentLoaded', function () {
             title: title,
             start: start,
             end: end,
-            notes: notes
+            notes: notes,
+            event_type: "time"
         };
     
         DataModel.createEvent(eventData).then(success => {

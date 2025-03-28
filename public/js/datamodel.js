@@ -213,6 +213,7 @@ const DataModel = (function () {
             }
         },
 
+        // 30 lines of code to change a single value... 
         toggleTaskCompletion: async function (eventId) {
             if (!token) {
                 console.error("❌ Token is not set.");
