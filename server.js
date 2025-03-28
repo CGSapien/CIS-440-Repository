@@ -208,7 +208,7 @@ app.get('/api/events', authenticateToken, async (req, res) => {
 
         const connection = await createConnection();
         const [rows] = await connection.execute(
-            'SELECT event_id, title, start, end, event_type, iscomplete FROM events WHERE user_id = ?',
+            'SELECT event_id, title, start, end, event_type, notes, iscomplete FROM events WHERE user_id = ?',
             [userId]
         );
 
@@ -235,15 +235,17 @@ app.get('/api/events', authenticateToken, async (req, res) => {
 app.put('/api/eventchanges', authenticateToken, async (req, res) => {
     try {
         const userId = req.user.email;
-        const eventId = req.params.event_id;
-        const { title, start, end, notes } = req.body;
+        const { event_id } = req.body; // Only expect event_id in the request body
 
+        if (!event_id) {
+            return res.status(400).json({ message: 'Event ID is required.' });
+        }
         const connection = await createConnection();
 
-        // Check if the event belongs to the user
+        // Retrieve current iscomplete value
         const [existingEvent] = await connection.execute(
-            'SELECT * FROM events WHERE event_id = ? AND user_id = ?',
-            [eventId, userId]
+            'SELECT iscomplete FROM events WHERE event_id = ? AND user_id = ?',
+            [event_id, userId]
         );
 
         if (existingEvent.length === 0) {
@@ -251,22 +253,20 @@ app.put('/api/eventchanges', authenticateToken, async (req, res) => {
             return res.status(403).json({ message: 'Unauthorized or event not found.' });
         }
 
-        // Update the event with provided fields
+        const currentStatus = existingEvent[0].iscomplete;
+        const newStatus = !currentStatus; // Flip the boolean value
+
+        // Update the iscomplete field
         await connection.execute(
-            `UPDATE events SET 
-                title = COALESCE(?, title),
-                start = COALESCE(?, start),
-                end = COALESCE(?, end),
-                notes = COALESCE(?, notes)
-            WHERE event_id = ? AND user_id = ?`,
-            [title, start, end, notes, eventId, userId]
+            'UPDATE events SET iscomplete = ? WHERE event_id = ? AND user_id = ?',
+            [newStatus, event_id, userId]
         );
 
         await connection.end();
-        res.status(200).json({ message: 'Event updated successfully.' });
+        res.status(200).json({ message: `Task completion status updated to ${newStatus}.` });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error updating event.', error: error.message });
+        res.status(500).json({ message: 'Error updating task completion status.', error: error.message });
     }
 });
 

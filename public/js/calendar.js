@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 category: "time", // Events are time-based
                 start: event.start, // Ensure format is YYYY-MM-DDTHH:mm:ss
                 end: event.end,
-                body: event.notes || ''
+                description: event.notes || ''
             }));
     
             // Format tasks (mark completed tasks differently)
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 category: task.event_type, // Differentiate tasks
                 start: task.start, // Some tasks may have a due date
                 end: task.end,
-                body: task.notes || '',
+                raw: { notes: task.notes },
                 backgroundColor: task.iscomplete ? '#90EE90' : '#FF6347'
             }));
     
@@ -179,5 +179,22 @@ document.addEventListener('DOMContentLoaded', function () {
     
     // Bind this function to the delete event
     calendar.on('beforeDeleteEvent', deleteEvent);
+
+    calendar.on('clickEvent', function(event) {
+        const task = event.event;
+        const notesText = task.raw?.notes || "No description available.";
+        
+        // Only trigger the confirmation for tasks
+        if (task.category === 'task') {
+            const message = `${task.title}\n\n${notesText}\n\nDo you want to complete this task?`;
+            
+            if (window.confirm(message)) {
+                alert('Task completed!');
+                DataModel.toggleTaskCompletion(task.id);
+            } else {
+                alert('Task not completed.');
+            }
+        }
+    });
     
 });

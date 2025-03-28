@@ -212,6 +212,40 @@ const DataModel = (function () {
                 return { error: error.message };
             }
         },
+
+        toggleTaskCompletion: async function (eventId) {
+            if (!token) {
+                console.error("❌ Token is not set.");
+                return false; // Indicate failure
+            }
+        
+            console.log("📤 Sending request to /api/eventchanges...");
+            console.log("🔍 Token:", token);
+            console.log("📨 Event ID:", eventId);
+        
+            try {
+                const response = await fetch('/api/eventchanges', {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': token,  // Ensure proper format
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ event_id: eventId }),
+                });
+        
+                if (!response.ok) {
+                    console.error("❌ Error toggling task completion:", await response.json());
+                    return false; // Indicate failure
+                }
+        
+                console.log("✅ Task completion status toggled successfully.");
+                return true; // Indicate success
+            } catch (error) {
+                console.error("❌ Error in API call:", error);
+                return false;
+            }
+        },
+        
             
         //ADD MORE FUNCTIONS HERE TO FETCH DATA FROM THE SERVER
         //AND SEND DATA TO THE SERVER AS NEEDED
