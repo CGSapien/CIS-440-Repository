@@ -194,7 +194,14 @@ document.addEventListener('DOMContentLoaded', function () {
             if (window.confirm(message)) {
                 alert('Task completed!');
                 DataModel.toggleTaskCompletion(task.id);
-                fetchAndDisplayEvents();
+
+                 // Update the task color to indicate completion
+                calendar.updateEvent(task.id, task.calendarId, {
+                    backgroundColor: '#90EE90', // Green background to indicate completion
+                });
+
+                calendar.render();
+                
             } else {
                 alert('Task not completed.');
             }
