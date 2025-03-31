@@ -63,7 +63,7 @@ html, body {
  .logo {
    position: relative; /* Keeps it in normal document flow */
    left: 5px;  /* Moves it slightly to the right (adjust as needed) */
-   top: 10px;   /* Moves it slightly downward (adjust as needed) */
+   top: 3px;   /* Moves it slightly downward (adjust as needed) */
    width: 150px;  /* Adjust as needed */
    height: auto;   /* Keeps aspect ratio */
 }
