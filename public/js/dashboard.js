@@ -283,6 +283,7 @@ async function submitTrainingPlan() {
         }
 
         console.log("Training plan submitted successfully!");
+        fetchAndDisplayEvents();
         closeTrainingModal(); // Close modal after submission
     } catch (error) {
         console.error("Error submitting training plan:", error);

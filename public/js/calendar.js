@@ -122,6 +122,8 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('cancelEvent').addEventListener('click', function() {
         closeEventModal()
     });
+
+    window.fetchAndDisplayEvents = fetchAndDisplayEvents;
     
     function saveEvent() {
         const title = document.getElementById('eventTitle').value;
@@ -192,6 +194,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (window.confirm(message)) {
                 alert('Task completed!');
                 DataModel.toggleTaskCompletion(task.id);
+                fetchAndDisplayEvents();
             } else {
                 alert('Task not completed.');
             }
