@@ -61,8 +61,8 @@ html, body {
     margin-left: auto;
  }
  .logo {
-   position: relative; /* Keeps it in normal document flow */
-   left: 5px;  /* Moves it slightly to the right (adjust as needed) */
+   position: absolute; /* Keeps it in normal document flow */
+   left: 50.6%;  /* Moves it slightly to the right (adjust as needed) */
    top: 3px;   /* Moves it slightly downward (adjust as needed) */
    width: 150px;  /* Adjust as needed */
    height: auto;   /* Keeps aspect ratio */
@@ -78,6 +78,21 @@ html, body {
     border-radius: 5px;
     transition: background 0.3s ease-in-out;
  }
+
+ .button {
+   background-color: gray;
+   color: white;
+   border: none;
+   padding: 12px 24px;
+   font-size: 16px;
+   cursor: pointer;
+   border-radius: 5px;
+   transition: background 0.3s ease-in-out;
+   min-width: 120px; /* Ensures a minimum width */
+   width: auto; /* Makes buttons scale dynamically */
+   max-width: 200px; /* Prevents oversized buttons */  
+ }
+
  .button:hover, .mindmap-button:hover, #logoutButton:hover, #refreshButton:hover {
     background-color: darkgray;
  }
@@ -86,9 +101,23 @@ html, body {
    display: flex;
    justify-content: center; /* Ensures equal spacing between buttons */
    align-items: center; /* Centers buttons vertically */
-   gap: 50px; /* Optional: Adds some spacing between the buttons */
-   margin-top: 55px; /* Adjust spacing as needed */
+   gap: 2vw; /* Optional: Adds some spacing between the buttons */
+   margin-top: 6.5vh; /* Adjust spacing as needed */
+   width: 90vw
  }
+
+ .button-group {
+   display: flex;
+   gap: 5vw; /* Adjusts spacing between buttons in each group */
+   position: relative;
+   left: 5vw; /* Moves button groups right */
+
+}
+
+.button-gap {
+   width: 5vw; /* Adjust this to change spacing */
+}
+
  /* User List Container */
  .container {
     background: rgba(255, 255, 255, 0.9);
@@ -188,7 +217,7 @@ html, body {
 
 /* Calendar Styling */
 #calendar {
-   margin-top: 1%; /* Pushes calendar below buttons */
+   margin-top: 2%; /* Pushes calendar below buttons */
    padding: 20px;
    background: white;
    border-radius: 10px;
