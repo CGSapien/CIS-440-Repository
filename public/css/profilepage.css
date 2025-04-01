@@ -188,7 +188,7 @@ html, body {
 
 /* Calendar Styling */
 #calendar {
-   margin-top: 10%; /* Pushes calendar below buttons */
+   margin-top: 1%; /* Pushes calendar below buttons */
    padding: 20px;
    background: white;
    border-radius: 10px;
