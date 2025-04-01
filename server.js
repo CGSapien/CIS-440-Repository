@@ -219,7 +219,7 @@ app.get('/api/events', authenticateToken, async (req, res) => {
         }
 
         // Separate tasks and events
-        const events = rows.filter(event => event.event_type === 'time');
+        const events = rows.filter(event => event.event_type === 'allday');
         const tasks = rows
             .filter(task => task.event_type === 'task')
             .map(task => ({ ...task, iscomplete: Boolean(task.iscomplete) })); // Ensure `iscomplete` is boolean
@@ -293,7 +293,7 @@ app.post('/api/newevents', authenticateToken, async (req, res) => {
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
                 [userId, calendar_id, title, start, end, notes || null, event_type, iscomplete] // Default iscomplete to 0 (incomplete)
             );
-        } else if (event_type === "time") {
+        } else if (event_type === "allday") {
             // Insert event into the database (no iscomplete for events)
             [result] = await connection.execute(
                 `INSERT INTO events (user_id, calendar_id, title, start, end, notes, event_type) 

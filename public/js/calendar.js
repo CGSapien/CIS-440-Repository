@@ -8,18 +8,16 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initialize the Toast UI calendar
     const calendar = new tui.Calendar(container, {
         defaultView: 'week',
-        scheduleView: ['time'],
+        scheduleView: ['allDay', 'task'], // Show only all-day events
         useCreationPopup: false,
         useDetailPopup: true,
-
+    
         week: {
-            taskView: ['task'],
-            eventView: true,
-            timeGridInterval: 60,
-            hourStart: 5,  // Start from 5 AM
-            hourEnd: 23 , // End at 11pm
-          },
+            taskView: ['task', 'allday'], // Show tasks
+            eventView: false, // Hide time-based events
+        },
     });
+    
 
     // Function to update the displayed month
     function updateMonthTitle() {
@@ -80,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 id: event.event_id.toString(), // Ensure ID is a string
                 calendarId: "events", // Assign a calendar category
                 title: event.title,
-                category: "time", // Events are time-based
+                category: event.event_type, // Events are time-based
                 start: event.start, // Ensure format is YYYY-MM-DDTHH:mm:ss
                 end: event.end,
                 description: event.notes || ''
@@ -137,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function () {
             start: start,
             end: end,
             notes: notes,
-            event_type: "time"
+            event_type: "allday"
         };
     
         DataModel.createEvent(eventData).then(success => {
