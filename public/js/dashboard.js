@@ -206,7 +206,7 @@ async function loadSavedGoals() {
 }
 
 // ADD EXERCISE FUNCTIONS
-const maxExercises = 3;
+const maxExercises = 10;
 
 document.getElementById('trainingPlanButton').addEventListener('click', () => {
     document.getElementById('trainingModal').style.display = 'block';
