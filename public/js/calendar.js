@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
         useDetailPopup: true,
     
         week: {
+            startDayOfWeek: 1,
             taskView: ['task', 'allday'], // Show tasks
             eventView: false, // Hide time-based events
         },
