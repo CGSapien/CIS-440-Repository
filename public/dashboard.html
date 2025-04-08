@@ -125,52 +125,63 @@
 
    <div class="modal-overlay" id="trainingModalOverlay"></div>
    <div id="trainingModal" class="modal" style="width: 90%; max-width: 1000px; font-family: Arial;">
-       <strong>
-       <h2>Create A Training Plan</h2>
-       <h3>3 Exercises Each Max</h3>
+       <h2>Create a Training Plan</h2>
+       <p style="margin-bottom: 20px;">
+           Fill out your training plan including warm-up, main exercises, and flexibility work. 
+           You can add multiple exercises per section.
+       </p>
+   
        <form id="trainingPlanForm">
-           <label>Start Time:</label>
+           <label for="startTime">Start Time:</label>
            <input type="datetime-local" name="startTime" required><br>
    
-           <label>End Time:</label>
+           <label for="endTime">End Time:</label>
            <input type="datetime-local" name="endTime" required><br>
    
+           <!-- Warmup Section -->
            <div id="warmup-section">
-               <h3>Create Warmup Exercises</h3>
-               <div class="exercise-entry warmup-entry" style="display: flex; gap: 10px; flex-wrap: wrap;; padding-top: 10px;">
-                   <input type="text" name="warmupName[]" placeholder="Warmup Exercise Name">
+               <h3>Warm-Up Exercises</h3>
+               <div class="exercise-entry warmup-entry" style="display: flex; gap: 10px; flex-wrap: wrap; padding-top: 10px;">
+                   <input type="text" name="warmupName[]" placeholder="Exercise Name">
                    <input type="number" name="warmupSets[]" placeholder="Sets">
                    <input type="number" name="warmupReps[]" placeholder="Reps">
                    <input type="text" name="warmupLoad[]" placeholder="Load">
+                   <input type="text" name="warmupDistance[]" placeholder="Distance (e.g. meters)">
                    <input type="text" name="warmupNotes[]" placeholder="Notes">
                </div>
-               <button type="button" onclick="addExercise('warmup')">Add Warmup</button>
+               <button type="button" onclick="addExercise('warmup')">Add Warm-Up</button>
            </div>
    
+           <!-- Main Exercise Section -->
            <div id="exercise-section">
-               <h3>Create Main Exercises</h3>
-               <div class="exercise-entry exercise-entry" style="display: flex; gap: 10px; flex-wrap: wrap;; padding-top: 10px;">
+               <h3>Main Exercises</h3>
+               <div class="exercise-entry exercise-entry" style="display: flex; gap: 10px; flex-wrap: wrap; padding-top: 10px;">
                    <input type="text" name="exerciseName[]" placeholder="Exercise Name">
                    <input type="number" name="exerciseSets[]" placeholder="Sets">
                    <input type="number" name="exerciseReps[]" placeholder="Reps">
                    <input type="text" name="exerciseLoad[]" placeholder="Load">
+                   <input type="text" name="exerciseDistance[]" placeholder="Distance (e.g. meters)">
                    <input type="text" name="exerciseNotes[]" placeholder="Notes">
                </div>
-               <button type="button" onclick="addExercise('exercise')">Add Exercise</button>
+               <button type="button" onclick="addExercise('exercise')">Add Main Exercise</button>
            </div>
    
+           <!-- Flexibility Section -->
            <div id="flexibility-section">
-               <h3>Create Flexibility Exercises</h3>
-               <div class="exercise-entry flexibility-entry" style="display: flex; gap: 10px; flex-wrap: wrap;; padding-top: 10px;">
-                   <input type="text" name="flexibilityName[]" placeholder="Flexibility Exercise Name">
-                   <input type="number" name="flexibilitySets[]" placeholder="Sets">
-                   <input type="number" name="flexibilityReps[]" placeholder="Reps">
-                   <input type="text" name="flexibilityLoad[]" placeholder="Load">
+               <h3>Flexibility Exercises</h3>
+               <div class="exercise-entry flexibility-entry" style="display: flex; gap: 10px; flex-wrap: wrap; padding-top: 10px;">
+                   <input type="text" name="flexibilityName[]" placeholder="Exercise Name">
+                   <input type="text" name="flexibilityTime[]" placeholder="Time (e.g. 30s)">
                    <input type="text" name="flexibilityNotes[]" placeholder="Notes">
                </div>
-               <button type="button" onclick="addExercise('flexibility')">Add Flexibility</button>
+               <button type="button" onclick="addExercise('flexibility')">Add Flexibility Exercise</button>
            </div>
    
+           <button type="submit">Save Plan</button>
+           <button type="button" onclick="closeTrainingModal()">Cancel</button>
+       </form>
+   </div>
+     
            <button type="submit">Save Plan</button>
            <button type="button" onclick="closeTrainingModal()">Cancel</button>
        </form>

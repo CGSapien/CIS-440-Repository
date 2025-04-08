@@ -205,7 +205,6 @@ async function loadSavedGoals() {
     }
 }
 
-// ADD EXERCISE FUNCTIONS
 const maxExercises = 10;
 
 document.getElementById('trainingPlanButton').addEventListener('click', () => {
@@ -216,6 +215,15 @@ document.getElementById('trainingPlanButton').addEventListener('click', () => {
 function closeTrainingModal() {
     document.getElementById('trainingModal').style.display = 'none';
     document.getElementById('trainingModalOverlay').style.display = 'none';
+    document.getElementById('trainingPlanForm').reset();
+
+    ['warmup', 'exercise', 'flexibility'].forEach(type => {
+        const section = document.getElementById(`${type}-section`);
+        const entries = section.querySelectorAll(`.${type}-entry`);
+        entries.forEach((entry, index) => {
+            if (index > 0) entry.remove(); // Keep only the first
+        });
+    });
 }
 
 function addExercise(type) {
@@ -247,34 +255,42 @@ async function submitTrainingPlan() {
         function getExercises(type) {
             return Array.from(document.querySelectorAll(`#${type}-section .${type}-entry`)).map(entry => {
                 const name = entry.querySelector(`input[name="${type}Name[]"]`).value.trim();
-                if (!name) return null; // Skip empty entries
+                if (!name) return null;
+
+                let notes = '';
+                if (type === 'flexibility') {
+                    notes = `Time: ${entry.querySelector(`input[name="${type}Time[]"]`).value || 'N/A'} | ` +
+                            `Notes: ${entry.querySelector(`input[name="${type}Notes[]"]`).value || 'None'}`;
+                } else {
+                    const sets = entry.querySelector(`input[name="${type}Sets[]"]`)?.value || 'N/A';
+                    const reps = entry.querySelector(`input[name="${type}Reps[]"]`)?.value || 'N/A';
+                    const load = entry.querySelector(`input[name="${type}Load[]"]`)?.value || 'N/A';
+                    const distance = entry.querySelector(`input[name="${type}Distance[]"]`)?.value || 'N/A';
+                    const extraNotes = entry.querySelector(`input[name="${type}Notes[]"]`)?.value || 'None';
+
+                    notes = `Sets: ${sets} | Reps: ${reps} | Load: ${load} | Distance: ${distance} | Notes: ${extraNotes}`;
+                }
 
                 return {
                     calendar_id: "excersise",
-                    title: name, // Exercise name becomes the title
+                    title: name,
                     start: startTime,
                     end: endTime,
                     event_type: "task",
-                    iscomplete: 0, // Default to incomplete
-                    notes: `Sets: ${entry.querySelector(`input[name="${type}Sets[]"]`).value || 'N/A'} | ` +
-                           `Reps: ${entry.querySelector(`input[name="${type}Reps[]"]`).value || 'N/A'} | ` +
-                           `Load: ${entry.querySelector(`input[name="${type}Load[]"]`).value || 'N/A'} | ` +
-                           `Notes: ${entry.querySelector(`input[name="${type}Notes[]"]`).value || 'None'}`
+                    iscomplete: 0,
+                    notes: notes
                 };
-            }).filter(exercise => exercise !== null); // Remove null values
+            }).filter(exercise => exercise !== null);
         }
 
-        // Gather all exercises separately
         const warmups = getExercises('warmup');
         const exercises = getExercises('exercise');
         const flexibility = getExercises('flexibility');
 
-        // Combine all tasks into one array
         const trainingTasks = [...warmups, ...exercises, ...flexibility];
 
         console.log("Final Training Plan Data:", trainingTasks);
 
-        // **Send each task to the API**
         for (const task of trainingTasks) {
             const success = await DataModel.createEvent(task);
             if (!success) {
@@ -284,7 +300,7 @@ async function submitTrainingPlan() {
 
         console.log("Training plan submitted successfully!");
         fetchAndDisplayEvents();
-        closeTrainingModal(); // Close modal after submission
+        closeTrainingModal();
     } catch (error) {
         console.error("Error submitting training plan:", error);
     }
