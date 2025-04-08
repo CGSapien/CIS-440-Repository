@@ -108,20 +108,21 @@
    
    <div class="modal-overlay" id="modalOverlay"></div>
    <div id="eventModal" class="modal" style="font-family: Arial;">
-       <strong>
-       <h2>Create New Event</h2>
+       <h2><strong>Create New Event</strong></h2>
+       
        <label>Title:</label>
        <input type="text" id="eventTitle"><br>
-       <label>Start Date:</label>
-       <input type="datetime-local" id="eventStart"><br>
-       <label>End Date:</label>
-       <input type="datetime-local" id="eventEnd"><br>
+   
+       <label>Date:</label>
+       <input type="date" id="eventDate"><br>
+   
        <label>Notes:</label>
        <textarea id="eventNotes"></textarea><br>
+   
        <button id="saveEvent">Save Event</button>
        <button id="cancelEvent">Cancel</button>
-       </strong>
    </div>
+   
 
    <div class="modal-overlay" id="trainingModalOverlay"></div>
    <div id="trainingModal" class="modal" style="width: 90%; max-width: 1000px; font-family: Arial;">

@@ -126,8 +126,8 @@ document.addEventListener('DOMContentLoaded', function () {
     
     function saveEvent() {
         const title = document.getElementById('eventTitle').value;
-        const start = document.getElementById('eventStart').value;
-        const end = document.getElementById('eventEnd').value;
+        const start = document.getElementById('eventDate').value;
+        const end = document.getElementById('eventDate').value;
         const notes = document.getElementById('eventNotes').value;
     
         const eventData = {
