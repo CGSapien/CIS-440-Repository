@@ -58,7 +58,7 @@ html, body {
  }
  /* Logout button aligned to the right */
  .header #logoutButton {
-    margin-left: auto;
+    margin-left: 90%;
  }
  .logo {
    position: absolute; /* Keeps it in normal document flow */
