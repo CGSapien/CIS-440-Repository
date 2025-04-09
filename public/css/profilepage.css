@@ -53,7 +53,7 @@ html, body {
  .header .mindmap-button {
     position: absolute;
     left: 50%;
-    top: 50px;
+    top: 40%;
     transform: translateX(-50%);
  }
  /* Logout button aligned to the right */
@@ -73,7 +73,6 @@ html, body {
    appearance: none;
    background-color: #FCFCFD;
    background-image: linear-gradient(to right, #827f7f 0%, #dadada  51%, #827f7f 100%);
-   /* #9d9d9d #878484*/
    border-radius: 4px;
    border-width: 0;
    box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,rgba(45, 35, 66, 0.3) 0 7px 13px -3px,#D6D6E7 0 -3px 0 inset;
@@ -268,18 +267,20 @@ html, body {
 
 /* Navigation Buttons */
 .calendar-nav-button {
-    background-color: #007bff;
+    background-color: #181717;
     color: white;
-    border: none;
     padding: 8px 16px;
     font-size: 16px;
     cursor: pointer;
     border-radius: 5px;
-    transition: background 0.3s ease-in-out;
+    transition: background 0.4s ease-in-out;
 }
 
 .calendar-nav-button:hover {
-    background-color: #0056b3;
+    background-color: rgb(210, 206, 206);
+    color: black;
+    font-weight: medium;
+    border-color:#dfdcdc;
 }
 
 /* Calendar Month Title */
