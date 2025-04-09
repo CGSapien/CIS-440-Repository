@@ -68,34 +68,53 @@ html, body {
    height: auto;   /* Keeps aspect ratio */
 }
  /* Style for all buttons */
- .button, .mindmap-button, #logoutButton, #refreshButton {
-    background-color: gray;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background 0.3s ease-in-out;
- }
-
- .button {
-   background-color: gray;
-   color: white;
-   border: none;
-   padding: 12px 24px;
-   font-size: 16px;
-   cursor: pointer;
-   border-radius: 5px;
+ .button, .mindmap-button {
+   align-items: center;
+   appearance: none;
+   background-color: #FCFCFD;
+   background-image: linear-gradient(to right, #827f7f 0%, #dadada  51%, #827f7f 100%);
+   /* #9d9d9d #878484*/
+   border-radius: 4px;
+   border-width: 0;
+   box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,rgba(45, 35, 66, 0.3) 0 7px 13px -3px,#D6D6E7 0 -3px 0 inset;
+   box-sizing: border-box;
+   color: black;
    transition: background 0.3s ease-in-out;
-   min-width: 120px; /* Ensures a minimum width */
-   width: auto; /* Makes buttons scale dynamically */
-   max-width: 200px; /* Prevents oversized buttons */  
+   cursor: pointer;
+   display: inline-flex;
+   height: 48px;
+   justify-content: center;
+   line-height: 1;
+   list-style: none;
+   overflow: hidden;
+   padding-left: 16px;
+   padding-right: 16px;
+   position: relative;
+   text-align: left;
+   text-decoration: none;
+   transition: box-shadow .15s,transform .15s;
+   user-select: none;
+   -webkit-user-select: none;
+   touch-action: manipulation;
+   white-space: nowrap;
+   will-change: box-shadow,transform;
+   font-size: 18px;
+   font-weight: medium;
  }
+ 
+ .button:focus, .mindmap-button:focus {
+   box-shadow: #D6D6E7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+ }
+ 
+ .button:hover {
+   box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+   transform: translateY(-2px);
+ }
+ .mindmap-button:hover {
+   transform: translateX(-50%) translateY(-2px); /* Keeps it centered while moving up */
+   box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+}
 
- .button:hover, .mindmap-button:hover, #logoutButton:hover, #refreshButton:hover {
-    background-color: darkgray;
- }
  /* Button container positioned at the top */
  .button-container {
    display: flex;
@@ -128,11 +147,7 @@ html, body {
     max-width: 500px;
     margin: 30px auto;
  }
- /* Refresh List Button inside User List */
- #refreshButton {
-    display: block;
-    margin: 15px auto 0;
- }
+ 
  /* Position goal list in the upper portion of the page */
  .goal-list {
     display: flex;
