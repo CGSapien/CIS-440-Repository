@@ -59,6 +59,36 @@ html, body {
  /* Logout button aligned to the right */
  .header #logoutButton {
     margin-left: 90%;
+    align-items: center;
+    appearance: none;
+    background-color: #FCFCFD;
+    background-image: linear-gradient(to right, #827f7f 0%, #dadada  51%, #827f7f 100%);
+    border-radius: 4px;
+    border-width: 0;
+    box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,rgba(45, 35, 66, 0.3) 0 7px 13px -3px,#D6D6E7 0 -3px 0 inset;
+    box-sizing: border-box;
+    color: black;
+    transition: background 0.3s ease-in-out;
+    cursor: pointer;
+    display: inline-flex;
+    height: 48px;
+    justify-content: center;
+    line-height: 1;
+    list-style: none;
+    overflow: hidden;
+    padding-left: 16px;
+    padding-right: 16px;
+    position: relative;
+    text-align: left;
+    text-decoration: none;
+    transition: box-shadow .15s,transform .15s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    will-change: box-shadow,transform;
+    font-size: 18px;
+    font-weight: medium;
  }
  .logo {
    position: absolute; /* Keeps it in normal document flow */
