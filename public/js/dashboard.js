@@ -331,32 +331,32 @@ async function submitTrainingPlan() {
 }
 
 function openChecklistModal(task) {
-    // Ensure the modal and checklist container exist
     const checklistModal = document.getElementById('checklistModal');
     const checklistItemsDiv = document.getElementById('checklistItems');
-    const saveButton = document.getElementById('saveChecklistButton'); // Assume you have a save button with this ID
+    const saveButton = document.getElementById('saveChecklistButton');
+    const appendItemButton = document.getElementById('appendItemButton');
+    const newItemTime = document.getElementById('newItemTime');
+    const newItemDetail = document.getElementById('newItemDetail');
+    const closeButton = document.getElementById('closeChecklistButton');
 
-    if (!checklistModal || !checklistItemsDiv || !saveButton) {
-        console.error("Error: Modal, checklistItems container, or save button not found.");
+    if (!checklistModal || !checklistItemsDiv || !saveButton || !appendItemButton || !newItemTime || !newItemDetail) {
+        console.error("Error: Modal or one of its elements not found.");
         return;
     }
 
-    // Show the modal
     checklistModal.style.display = 'block';
 
-    // Parse the raw checklist from task.raw.checklist (which is a JSON string)
     let checklist = [];
-    
+
     try {
         if (task.raw.checklist && typeof task.raw.checklist === 'string') {
             checklist = JSON.parse(task.raw.checklist);
         } else {
-            console.error("Error: task.raw.checklist is either empty or not a valid string.");
-            return;
+            checklist = [];
         }
     } catch (e) {
         console.error("Error parsing task.raw.checklist:", e);
-        return;
+        checklist = [];
     }
 
     if (!Array.isArray(checklist)) {
@@ -364,49 +364,77 @@ function openChecklistModal(task) {
         return;
     }
 
-    // Clear any existing items in the checklist
-    checklistItemsDiv.innerHTML = '';
+    // Helper to render checklist items
+    const renderChecklist = () => {
+        checklistItemsDiv.innerHTML = '';
 
-    // If checklist is empty, display a message
-    if (checklist.length === 0) {
-        checklistItemsDiv.innerHTML = '<p>No items in the checklist.</p>';
-        return;
-    }
+        if (checklist.length === 0) {
+            checklistItemsDiv.innerHTML = '<p>No items in the checklist.</p>';
+            return;
+        }
 
-    // Loop through the checklist and display each item
-    checklist.forEach(item => {
-        let checklistItemDiv = document.createElement('div');
-        let checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.checked = item.complete;
-        
-        // Add data-item to identify the checkbox in toggleItemCompletion
-        checkbox.setAttribute('data-item', item.item); // This links the checkbox to the item
+        checklist.forEach((item, index) => {
+            let checklistItemDiv = document.createElement('div');
+            let checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.checked = item.complete;
+            checkbox.setAttribute('data-item', item.item);
 
-        // Use a closure to capture task and item
-        checkbox.addEventListener('click', function() {
-            // Update the completion status when a checkbox is clicked
-            item.complete = checkbox.checked;
+            checkbox.addEventListener('click', () => {
+                item.complete = checkbox.checked;
+            });
+
+            checklistItemDiv.appendChild(checkbox);
+            checklistItemDiv.appendChild(document.createTextNode(` ${item.time || ''} ${item.item}`));
+            checklistItemsDiv.appendChild(checklistItemDiv);
         });
+    };
 
-        checklistItemDiv.appendChild(checkbox);
-        checklistItemDiv.appendChild(document.createTextNode(item.item));
-        checklistItemsDiv.appendChild(checklistItemDiv);
-    });
+    renderChecklist(); // Initial render
 
-    // Attach event listener to the "Save" button to save the updated checklist
-    saveButton.addEventListener('click', function() {
+    // Add new item logic
+    appendItemButton.onclick = () => {
+        const time = newItemTime.value.trim();
+        const detail = newItemDetail.value.trim();
+    
+        if (!detail || !time) {
+            alert("Please enter both time and detail for the checklist item.");
+            return;
+        }
+    
+        const formattedItem = `${time} - ${detail}`;
+    
+        const newItem = {
+            item: formattedItem,
+            complete: false
+        };
+    
+        checklist.push(newItem);
+        renderChecklist();
+    
+        newItemTime.value = '';
+        newItemDetail.value = '';
+    };
+    
+
+    // Save logic
+    saveButton.onclick = () => {
         calendar.updateEvent(task.id, task.calendarId, {
             raw: {
-                checklist: checklist // Store the checklist in the raw field
-            }, 
+                checklist: checklist
+            },
         });
 
         saveChecklistToEvent(task.id, checklist);
-
-        // Close the modal after saving
         checklistModal.style.display = 'none';
-    });
+    };
+
+    closeButton.onclick = () => {
+        
+        newItemTime.value = '';
+        newItemDetail.value = '';
+        checklistModal.style.display = 'none';
+    };
 }
 
 function saveChecklistToEvent(eventid, checklist) {
@@ -415,7 +443,7 @@ function saveChecklistToEvent(eventid, checklist) {
     console.log(`Saving checklist for event ${eventid}:`, checklist);
 
     // Send the stringified checklist to the backend
-    DataModel.toggleChecklistUpdate(eventid, checklist); // The backend expects a string, not an array
+    DataModel.checklistUpdate(eventid, checklist); // The backend expects a string, not an array
 }
 
 //////////////////////////////////////////

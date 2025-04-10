@@ -247,7 +247,7 @@ const DataModel = (function () {
             }
         },
     
-        toggleChecklistUpdate: async function (eventId, updatedChecklist) {
+        checklistUpdate: async function (eventId, updatedChecklist) {
             if (!token) {
                 console.error("❌ Token is not set.");
                 return false; // Indicate failure
