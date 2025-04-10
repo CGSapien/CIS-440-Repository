@@ -452,13 +452,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const nutritionPlanButton = document.getElementById('nutritionPlanButton');
     const nutritionPlanModal = document.getElementById('nutritionPlanModal');
     const nutritionPlanForm = document.getElementById('nutritionPlanForm');
+    const cancelButton = document.getElementById('cancelButton');
 
     // Open Nutrition Plan Modal when button is clicked
     nutritionPlanButton.addEventListener('click', () => {
         nutritionPlanModal.style.display = 'block';
     });
 
-    // Close Nutrition Plan Modal when 'x' is clicked
+    // Close Nutrition Plan Modal when Cancel button is clicked
+    cancelButton.addEventListener('click', () => {
+        closeNutritionPlanModal(); // Close modal
+    });
+
     function closeNutritionPlanModal() {
         nutritionPlanModal.style.display = 'none';
     }
@@ -471,10 +476,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const mealDescription = document.getElementById('mealDescription').value.trim();
         const mealTime = document.getElementById('mealTime').value;
 
-        if (!mealType || !mealDescription || !mealTime) {
-            alert('Please fill out all fields!');
-            return;
-        }
+        // if (!mealType || !mealDescription || !mealTime) {
+        //     alert('Please fill out all fields!');
+        //     return;
+        // }
 
         // Here we would send the nutrition plan data to the server or handle it as needed.
         // For example, if using DataModel:
