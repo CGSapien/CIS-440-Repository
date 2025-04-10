@@ -114,8 +114,14 @@
        <label>Date:</label>
        <input type="date" id="eventDate"><br>
    
-       <label>Notes:</label>
-       <textarea id="eventNotes"></textarea><br>
+       <div id="eventItemsContainer">
+        <label>Todo list:</label><br>
+        <div class="eventItem">
+            <input type="time" class="eventTime">
+            <input type="text" class="eventDetail" placeholder="Details">
+        </div>
+    </div>
+    <button type="button" id="addItemButton">Add Item</button><br><br>
    
        <button id="saveEvent">Save Event</button>
        <button id="cancelEvent">Cancel</button>
@@ -180,6 +186,23 @@
            <button type="button" onclick="closeTrainingModal()">Cancel</button>
        </form>
    </div>
+
+   <div id="checklistModal" class="modal" style="display:none; font-family: Arial; border: 1px solid #ccc; padding: 20px; max-width: 500px; background-color: #fff; position: absolute; z-index: 9999;">
+        <h2>Checklist</h2>
+        <div id="checklistItems"></div>
+
+        <div style="margin-top: 10px;">
+            <input type="time" id="newItemTime" />
+            <input type="text" id="newItemDetail" placeholder="Detail" />
+            <button onclick="addChecklistItem()">Add Item</button>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <button id="saveChecklistButton">Save</button>
+            <button id="closeChecklistButton">Close</button>
+        </div>
+    </div>
+
      
 
    <!-- Toast UI Calendar JS from CDN -->

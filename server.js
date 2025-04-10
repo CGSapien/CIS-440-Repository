@@ -208,7 +208,7 @@ app.get('/api/events', authenticateToken, async (req, res) => {
 
         const connection = await createConnection();
         const [rows] = await connection.execute(
-            'SELECT event_id, title, start, end, event_type, notes, iscomplete FROM events WHERE user_id = ?',
+            'SELECT event_id, calendar_id, title, start, end, event_type, notes, iscomplete FROM events WHERE user_id = ?',
             [userId]
         );
 
@@ -219,7 +219,21 @@ app.get('/api/events', authenticateToken, async (req, res) => {
         }
 
         // Separate tasks and events
-        const events = rows.filter(event => event.event_type === 'allday');
+        const events = rows
+        .filter(event => event.event_type === 'allday')
+        .map(event => {
+            let checklist = [];
+            try {
+                checklist = event.notes ? JSON.parse(event.notes) : [];
+            } catch (err) {
+                console.warn("Failed to parse notes JSON for event_id:", event.event_id);
+            }
+
+            return {
+                ...event,
+                checklist
+            };
+        });
         const tasks = rows
             .filter(task => task.event_type === 'task')
             .map(task => ({ ...task, iscomplete: Boolean(task.iscomplete) })); // Ensure `iscomplete` is boolean
@@ -269,6 +283,48 @@ app.put('/api/eventchanges', authenticateToken, async (req, res) => {
         res.status(500).json({ message: 'Error updating task completion status.', error: error.message });
     }
 });
+
+app.put('/api/updatechecklist', authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user.email;
+        const { event_id, checklist } = req.body;
+
+        if (!event_id || !Array.isArray(checklist)) {
+            console.log(event_id);
+            console.log(checklist);
+            return res.status(400).json({ message: 'Missing event_id or checklist.' });
+        }
+
+        const connection = await createConnection();
+
+        const [existingEvent] = await connection.execute(
+            'SELECT event_id FROM events WHERE event_id = ? AND user_id = ?',
+            [event_id, userId]
+        );
+
+        if (existingEvent.length === 0) {
+            await connection.end();
+            return res.status(403).json({ message: 'Unauthorized or event not found.' });
+        }
+
+        // Serialize the checklist before saving it to the database
+        const checklistString = JSON.stringify(checklist);
+
+        // Update the event's notes with the serialized checklist
+        await connection.execute(
+            'UPDATE events SET notes = ? WHERE event_id = ? AND user_id = ?',
+            [checklistString, event_id, userId]
+        );
+
+        await connection.end();
+        res.status(200).json({ message: 'Checklist updated successfully.' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error updating checklist.', error: error.message });
+    }
+});
+
+
 
 //create event
 app.post('/api/newevents', authenticateToken, async (req, res) => {

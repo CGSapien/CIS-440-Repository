@@ -246,6 +246,50 @@ const DataModel = (function () {
                 return false;
             }
         },
+    
+        toggleChecklistUpdate: async function (eventId, updatedChecklist) {
+            if (!token) {
+                console.error("❌ Token is not set.");
+                return false; // Indicate failure
+            }
+        
+            console.log("📤 Sending request to /api/updatechecklist...");
+            console.log("🔍 Token:", token);
+            console.log("📨 Event ID:", eventId);
+        
+            // Ensure that updatedChecklist is an array (in case something went wrong earlier)
+            if (!Array.isArray(updatedChecklist)) {
+                console.error("❌ Updated checklist is not an array.");
+                return false; // Indicate failure
+            }
+        
+            console.log("📋 Updated Checklist:", updatedChecklist);
+        
+            try {
+                const response = await fetch('/api/updatechecklist', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': token, // Ensure token is included in headers
+                    },
+                    body: JSON.stringify({
+                        event_id: eventId,
+                        checklist: updatedChecklist, // Send it as an array (don't stringify it here)
+                    }),
+                });
+        
+                if (!response.ok) {
+                    console.error("❌ Error updating checklist:", await response.json());
+                    return false; // Indicate failure
+                }
+        
+                console.log("✅ Checklist updated successfully.");
+                return true; // Indicate success
+            } catch (error) {
+                console.error("❌ Error in API call:", error);
+                return false;
+            }
+        },
         
             
         //ADD MORE FUNCTIONS HERE TO FETCH DATA FROM THE SERVER

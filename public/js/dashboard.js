@@ -205,6 +205,30 @@ async function loadSavedGoals() {
     }
 }
 
+addItemButton.addEventListener('click', function() {
+    // Create a new div for the new event item
+    let newEventItemDiv = document.createElement('div');
+    newEventItemDiv.classList.add('eventItem');
+
+    // Create time input
+    let timeInput = document.createElement('input');
+    timeInput.type = 'time';
+    timeInput.classList.add('eventTime');  // Add class for styling or future reference
+
+    // Create detail input
+    let detailInput = document.createElement('input');
+    detailInput.type = 'text';
+    detailInput.classList.add('eventDetail');  // Add class for styling or future reference
+    detailInput.placeholder = 'Details';  // Placeholder text
+
+    // Append inputs to the new event item div
+    newEventItemDiv.appendChild(timeInput);
+    newEventItemDiv.appendChild(detailInput);
+
+    // Append the new event item div to the event items container
+    eventItemsContainer.appendChild(newEventItemDiv);
+});
+
 const maxExercises = 10;
 
 document.getElementById('trainingPlanButton').addEventListener('click', () => {
@@ -304,6 +328,94 @@ async function submitTrainingPlan() {
     } catch (error) {
         console.error("Error submitting training plan:", error);
     }
+}
+
+function openChecklistModal(task) {
+    // Ensure the modal and checklist container exist
+    const checklistModal = document.getElementById('checklistModal');
+    const checklistItemsDiv = document.getElementById('checklistItems');
+    const saveButton = document.getElementById('saveChecklistButton'); // Assume you have a save button with this ID
+
+    if (!checklistModal || !checklistItemsDiv || !saveButton) {
+        console.error("Error: Modal, checklistItems container, or save button not found.");
+        return;
+    }
+
+    // Show the modal
+    checklistModal.style.display = 'block';
+
+    // Parse the raw checklist from task.raw.checklist (which is a JSON string)
+    let checklist = [];
+    
+    try {
+        if (task.raw.checklist && typeof task.raw.checklist === 'string') {
+            checklist = JSON.parse(task.raw.checklist);
+        } else {
+            console.error("Error: task.raw.checklist is either empty or not a valid string.");
+            return;
+        }
+    } catch (e) {
+        console.error("Error parsing task.raw.checklist:", e);
+        return;
+    }
+
+    if (!Array.isArray(checklist)) {
+        console.error("Error: checklist is not an array.", checklist);
+        return;
+    }
+
+    // Clear any existing items in the checklist
+    checklistItemsDiv.innerHTML = '';
+
+    // If checklist is empty, display a message
+    if (checklist.length === 0) {
+        checklistItemsDiv.innerHTML = '<p>No items in the checklist.</p>';
+        return;
+    }
+
+    // Loop through the checklist and display each item
+    checklist.forEach(item => {
+        let checklistItemDiv = document.createElement('div');
+        let checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = item.complete;
+        
+        // Add data-item to identify the checkbox in toggleItemCompletion
+        checkbox.setAttribute('data-item', item.item); // This links the checkbox to the item
+
+        // Use a closure to capture task and item
+        checkbox.addEventListener('click', function() {
+            // Update the completion status when a checkbox is clicked
+            item.complete = checkbox.checked;
+        });
+
+        checklistItemDiv.appendChild(checkbox);
+        checklistItemDiv.appendChild(document.createTextNode(item.item));
+        checklistItemsDiv.appendChild(checklistItemDiv);
+    });
+
+    // Attach event listener to the "Save" button to save the updated checklist
+    saveButton.addEventListener('click', function() {
+        calendar.updateEvent(task.id, task.calendarId, {
+            raw: {
+                checklist: checklist // Store the checklist in the raw field
+            }, 
+        });
+
+        saveChecklistToEvent(task.id, checklist);
+
+        // Close the modal after saving
+        checklistModal.style.display = 'none';
+    });
+}
+
+function saveChecklistToEvent(eventid, checklist) {
+    // Example: Saving the checklist to the event (could be an API call to save to a database)
+    // Here we're just logging it, but you should replace it with the actual save logic.
+    console.log(`Saving checklist for event ${eventid}:`, checklist);
+
+    // Send the stringified checklist to the backend
+    DataModel.toggleChecklistUpdate(eventid, checklist); // The backend expects a string, not an array
 }
 
 //////////////////////////////////////////

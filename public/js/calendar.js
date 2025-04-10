@@ -1,3 +1,5 @@
+let calendar;
+
 document.addEventListener('DOMContentLoaded', function () {
     const container = document.getElementById('calendar');
     if (!container) {
@@ -6,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Initialize the Toast UI calendar
-    const calendar = new tui.Calendar(container, {
+    calendar = new tui.Calendar(container, {
         defaultView: 'week',
         scheduleView: ['allDay', 'task'], // Show only all-day events
         useCreationPopup: false,
@@ -76,13 +78,15 @@ document.addEventListener('DOMContentLoaded', function () {
     
             // Format events
             const formattedEvents = data.events.map(event => ({
-                id: event.event_id.toString(), // Ensure ID is a string
-                calendarId: "events", // Assign a calendar category
+                id: event.event_id, // Ensure ID is a string
+                calendarId: event.calendar_id, // Assign a calendar category
                 title: event.title,
                 category: event.event_type, // Events are time-based
                 start: event.start, // Ensure format is YYYY-MM-DDTHH:mm:ss
                 end: event.end,
-                description: event.notes || ''
+                raw: {
+                    checklist: event.notes // Store the checklist in the raw field
+                },
             }));
     
             // Format tasks (mark completed tasks differently)
@@ -126,18 +130,39 @@ document.addEventListener('DOMContentLoaded', function () {
     
     function saveEvent() {
         const title = document.getElementById('eventTitle').value;
-        const start = document.getElementById('eventDate').value;
-        const end = document.getElementById('eventDate').value;
-        const notes = document.getElementById('eventNotes').value;
-    
-        const eventData = {
-            calendar_id: "daily_journal",
-            title: title,
-            start: start,
-            end: end,
-            notes: notes,
-            event_type: "allday"
-        };
+    const start = document.getElementById('eventDate').value;
+    const end = document.getElementById('eventDate').value;
+    const notes = document.getElementById('eventNotes') ? document.getElementById('eventNotes').value : '';
+
+    // Get all the event items (time and detail fields) from the Todo list
+    const eventItems = [];
+    const eventItemElements = document.querySelectorAll('.eventItem');
+
+    eventItemElements.forEach(item => {
+        const time = item.querySelector('.eventTime').value;
+        const detail = item.querySelector('.eventDetail').value;
+        if (time && detail) {
+            eventItems.push({ time: time, detail: detail });
+        }
+    });
+
+    // Format the checklist for notes (if you want to store them as a checklist)
+    const checklist = eventItems.map(item => ({
+        item: `${item.time} - ${item.detail}`,
+        complete: false
+    }));
+
+    // Event data object
+    const eventData = {
+        calendar_id: "daily_journal",
+        title: title,
+        start: start,
+        end: end,
+        notes: JSON.stringify(checklist), // Store the checklist as JSON in the notes field
+        event_type: "allday"
+    };
+
+    console.log("Event data:", eventData);
     
         DataModel.createEvent(eventData).then(success => {
             if (success) {
@@ -193,18 +218,23 @@ document.addEventListener('DOMContentLoaded', function () {
             if (window.confirm(message)) {
                 alert('Task completed!');
                 DataModel.toggleTaskCompletion(task.id);
-
-                 // Update the task color to indicate completion
+    
+                // Update the task color to indicate completion
                 calendar.updateEvent(task.id, task.calendarId, {
                     backgroundColor: '#90EE90', // Green background to indicate completion
                 });
-
+    
                 calendar.render();
-                
             } else {
                 alert('Task not completed.');
             }
         }
-    });
     
+        // Open the checklist modal only for the 'daily_journal' calendar
+        if (task.calendarId === 'daily_journal') {
+            // Pass the relevant task data to the modal
+            openChecklistModal(task);
+        }
+    });
+        
 });
