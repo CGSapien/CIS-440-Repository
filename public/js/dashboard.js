@@ -446,6 +446,60 @@ function saveChecklistToEvent(eventid, checklist) {
     DataModel.checklistUpdate(eventid, checklist); // The backend expects a string, not an array
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+
+    // Reference the Nutrition Plan button and modal
+    const nutritionPlanButton = document.getElementById('nutritionPlanButton');
+    const nutritionPlanModal = document.getElementById('nutritionPlanModal');
+    const nutritionPlanForm = document.getElementById('nutritionPlanForm');
+
+    // Open Nutrition Plan Modal when button is clicked
+    nutritionPlanButton.addEventListener('click', () => {
+        nutritionPlanModal.style.display = 'block';
+    });
+
+    // Close Nutrition Plan Modal when 'x' is clicked
+    function closeNutritionPlanModal() {
+        nutritionPlanModal.style.display = 'none';
+    }
+
+    // Submit the Nutrition Plan form
+    nutritionPlanForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const mealType = document.getElementById('mealType').value.trim();
+        const mealDescription = document.getElementById('mealDescription').value.trim();
+        const mealTime = document.getElementById('mealTime').value;
+
+        if (!mealType || !mealDescription || !mealTime) {
+            alert('Please fill out all fields!');
+            return;
+        }
+
+        // Here we would send the nutrition plan data to the server or handle it as needed.
+        // For example, if using DataModel:
+        const success = await DataModel.createNutritionPlan({
+            mealType,
+            mealDescription,
+            mealTime,
+        });
+
+        if (success) {
+            alert('Nutrition plan saved successfully!');
+            closeNutritionPlanModal(); // Close the modal after saving
+        } else {
+            alert('Failed to save nutrition plan. Try again.');
+        }
+    });
+
+    // Close modal functionality when clicking outside of the modal content area
+    window.addEventListener('click', (event) => {
+        if (event.target === nutritionPlanModal) {
+            closeNutritionPlanModal();
+        }
+    });
+});
+
 //////////////////////////////////////////
 //END FUNCTIONS TO MANIPULATE THE DOM
 //////////////////////////////////////////
