@@ -507,16 +507,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.getElementById("nutritionPlanForm").addEventListener("submit", function(e) {
     e.preventDefault();
-  
-    // Get input values (convert to floats for safety)
+
+    // Get input values (convert to floats)
     const menWeight = parseFloat(document.getElementById("menKg").value) || null;
-    const menHeight = parseFloat(document.getElementById("menInches").value) || null;
+    const menHeightInches = parseFloat(document.getElementById("menInches").value) || null;
     const menAge = parseFloat(document.getElementById("menAge").value) || null;
-  
+
     const womenWeight = parseFloat(document.getElementById("womenKg").value) || null;
-    const womenHeight = parseFloat(document.getElementById("womenInches").value) || null;
+    const womenHeightInches = parseFloat(document.getElementById("womenInches").value) || null;
     const womenAge = parseFloat(document.getElementById("womenAge").value) || null;
-  
+
     let menResult = document.getElementById("menResult");
     let womenResult = document.getElementById("womenResult");
 
@@ -525,21 +525,27 @@ document.getElementById("nutritionPlanForm").addEventListener("submit", function
     womenResult.textContent = "";
 
     // Calculate for Men
-    if (menKg !== null && menInches !== null && menAge !== null) {
-        const menBMR = (10 * menKg) + (6.25 * menInches) - (5 * menAge) + 5;
-        menResult.textContent = `Men = ${menBMR.toFixed(2)}`;
+    if (menWeight !== null && menHeightInches !== null && menAge !== null) {
+        const menHeightCm = menHeightInches * 2.54;
+        const menBMR = (10 * menWeight) + (6.25 * menHeightCm) - (5 * menAge) + 5;
+        menResult.textContent = `Men = ${menBMR.toFixed(2)} calories/day`;
+    } else {
+        menResult.textContent = "It looks like you left the values for men empty!";
     }
 
     // Calculate for Women
-    if (womenKg !== null && womenInches !== null && womenAge !== null) {
-        const womenBMR = (10 * womenKg) + (6.25 * womenInches) - (5 * womenAge) - 161;
-        womenResult.textContent = `Women = ${womenBMR.toFixed(2)}`;
+    if (womenWeight !== null && womenHeightInches !== null && womenAge !== null) {
+        const womenHeightCm = womenHeightInches * 2.54;
+        const womenBMR = (10 * womenWeight) + (6.25 * womenHeightCm) - (5 * womenAge) - 161;
+        womenResult.textContent = `Women = ${womenBMR.toFixed(2)} calories/day`;
+    } else {
+        womenResult.textContent = "It looks like you left the values for wom empty!";
     }
-  });
+});
 
-  document.getElementById("closeNutritionPlan").addEventListener("click", function () {
+document.getElementById("closeNutritionPlan").addEventListener("click", function () {
     closeNutritionPlanModal();
-  });  
+});
 
 //////////////////////////////////////////
 //END FUNCTIONS TO MANIPULATE THE DOM
