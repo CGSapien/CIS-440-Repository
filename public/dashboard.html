@@ -209,15 +209,17 @@
         <span class="close" onclick="closeNutritionPlanModal()">&times;</span>
         <h2>Create a Nutrition Plan</h2>
         <form id="nutritionPlanForm">
-            <!-- Example content: You can add more fields here as needed -->
-            <label for="mealType">Meal Type:</label>
-            <input type="text" id="mealType" name="mealType" placeholder="e.g., Breakfast"><br>
-
-            <label for="mealDescription">Description:</label>
-            <textarea id="mealDescription" name="mealDescription" placeholder="e.g., Scrambled eggs, toast, etc."></textarea><br>
-
-            <label for="mealTime">Meal Time:</label>
-            <input type="time" id="mealTime" name="mealTime"><br>
+            <p><strong>Men:</strong> 10 x 
+                <input type="number" id="menKg" placeholder="weight">kilograms + 
+                6.25 x <input type="number" id="menInches" placeholder="height">inches - 
+                5 x <input type="number" id="menAge" placeholder="age">years + 5
+              </p>
+        
+              <p><strong>Women:</strong> 10 x 
+                <input type="number" id="womenKg" placeholder="weight">kilograms + 
+                6.25 x <input type="number" id="womenInches" placeholder="height">inches - 
+                5 x <input type="number" id="womenAge" placeholder="age">inches - 161
+              </p>
 
             <button type="submit">Save Plan</button>
             <button id="cancelEvent">Cancel</button>
