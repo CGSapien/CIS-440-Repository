@@ -208,6 +208,7 @@
     <div class="modal-content">
         <span class="close" onclick="closeNutritionPlanModal()">&times;</span>
         <h2>Create a Nutrition Plan</h2>
+        <h3>Mifflin St. Jeor</h3>
         <form id="nutritionPlanForm">
             <p><strong>Men:</strong> 10 x 
                 <input type="number" id="menKg" placeholder="weight">kilograms + 
@@ -218,11 +219,17 @@
               <p><strong>Women:</strong> 10 x 
                 <input type="number" id="womenKg" placeholder="weight">kilograms + 
                 6.25 x <input type="number" id="womenInches" placeholder="height">inches - 
-                5 x <input type="number" id="womenAge" placeholder="age">inches - 161
+                5 x <input type="number" id="womenAge" placeholder="age">years - 161
               </p>
 
             <button type="submit">Save Plan</button>
-            <button id="cancelEvent">Cancel</button>
+            <button type="button" id="cancelEvent">Cancel</button>
+
+            <div style="margin-top: 20px;">
+                <p id="menResult">Men = </p>
+                <p id="womenResult">Women = </p>
+            </div>
+              
         </form>
     </div>
 </div>
