@@ -452,7 +452,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const nutritionPlanButton = document.getElementById('nutritionPlanButton');
     const nutritionPlanModal = document.getElementById('nutritionPlanModal');
     const nutritionPlanForm = document.getElementById('nutritionPlanForm');
-    const cancelButton = document.getElementById('cancelButton');
+    const cancelButton = document.getElementById('closeNutritionPlan');
 
     // Open Nutrition Plan Modal when button is clicked
     nutritionPlanButton.addEventListener('click', () => {
@@ -537,7 +537,7 @@ document.getElementById("nutritionPlanForm").addEventListener("submit", function
     }
   });
 
-  document.getElementById("cancelEvent").addEventListener("click", function () {
+  document.getElementById("closeNutritionPlan").addEventListener("click", function () {
     closeNutritionPlanModal();
   });  
 
