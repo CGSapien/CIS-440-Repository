@@ -500,12 +500,11 @@ function openNutritionModal(task) {
     let nutritionItems = [];
 
     try {
-        if (task.raw.nutritionPlan && typeof task.raw.nutritionPlan === 'string') {
-            nutritionItems = JSON.parse(task.raw.nutritionPlan);
-        } else if (Array.isArray(task.raw.nutritionPlan)) {
-            nutritionItems = task.raw.nutritionPlan;
-        }
-    } catch (e) {
+        if (task.raw.checklist && typeof task.raw.checklist === 'string') {
+            nutritionItems = JSON.parse(task.raw.checklist);
+        }    
+    } 
+    catch (e) {
         console.error("Error parsing task.raw.nutritionPlan:", e);
         nutritionItems = [];
     }
@@ -563,8 +562,7 @@ function openNutritionModal(task) {
     saveButton.onclick = () => {
         calendar.updateEvent(task.id, task.calendarId, {
             raw: {
-                ...task.raw,
-                nutritionPlan: JSON.stringify(nutritionItems),
+                checklist: JSON.stringify(nutritionItems),
             },
         });
 

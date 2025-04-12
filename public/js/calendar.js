@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
         week: {
             startDayOfWeek: 1,
-            taskView: ['allday'], // Show tasks
+            taskView: ['allday', 'task'], // Show tasks
             eventView: false, // Hide time-based events
         },
     });
