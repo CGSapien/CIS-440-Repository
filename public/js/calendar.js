@@ -10,13 +10,13 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initialize the Toast UI calendar
     calendar = new tui.Calendar(container, {
         defaultView: 'week',
-        scheduleView: ['allDay', 'task'], // Show only all-day events
+        scheduleView: ['allDay'], // Show only all-day events
         useCreationPopup: false,
         useDetailPopup: true,
     
         week: {
             startDayOfWeek: 1,
-            taskView: ['task', 'allday'], // Show tasks
+            taskView: ['allday'], // Show tasks
             eventView: false, // Hide time-based events
         },
     });
