@@ -333,46 +333,45 @@ app.post('/api/newevents', authenticateToken, async (req, res) => {
         const { calendar_id, title, start, end, notes, event_type, iscomplete } = req.body;
 
         // Validate required fields
-        if (!calendar_id || !title || !start || !end ) {
-            console.log(req.body)
-            return res.status(400).json({ message: 'Missing required fields: calendar_id, title, start, end, event_type.' });
-
+        if (!calendar_id || !title || !start || !end) {
+            console.log(req.body);
+            return res.status(400).json({ message: 'Missing required fields: calendar_id, title, start, end.' });
         }
 
         const connection = await createConnection();
         let result;
 
-        if (event_type === "task") {
-            // Insert task into the database
+        if (calendar_id === "exercise") {
+            // Insert task (has iscomplete)
             [result] = await connection.execute(
                 `INSERT INTO events (user_id, calendar_id, title, start, end, notes, event_type, iscomplete) 
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-                [userId, calendar_id, title, start, end, notes || null, event_type, iscomplete] // Default iscomplete to 0 (incomplete)
+                [userId, calendar_id, title, start, end, notes || null, event_type, iscomplete ? 1 : 0]
             );
-        } else if (event_type === "allday") {
-            // Insert event into the database (no iscomplete for events)
+        } else if (calendar_id === "daily_journal" || calendar_id === "nutrition_plan") {
             [result] = await connection.execute(
                 `INSERT INTO events (user_id, calendar_id, title, start, end, notes, event_type) 
                  VALUES (?, ?, ?, ?, ?, ?, ?)`,
                 [userId, calendar_id, title, start, end, notes || null, event_type]
             );
         } else {
-            return res.status(400).json({ message: 'Invalid event_type. Use "event" or "task".' });
+            return res.status(400).json({ message: 'Invalid calendar_id. Must be "daily_journal", "exercise", or "nutrition_plan".' });
         }
 
         await connection.end();
 
         if (!result) {
-            return res.status(500).json({ message: 'Error inserting event/task into the database.' });
+            return res.status(500).json({ message: 'Error inserting event into the database.' });
         }
 
-        res.status(201).json({ message: 'Event/Task created successfully.', event_id: result.insertId });
+        res.status(201).json({ message: 'Event created successfully.', event_id: result.insertId });
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error creating event/task.', error: error.message });
+        res.status(500).json({ message: 'Error creating event.', error: error.message });
     }
 });
+
 //new post 
 
 // DELETE an Event 

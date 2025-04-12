@@ -438,12 +438,154 @@ function openChecklistModal(task) {
 }
 
 function saveChecklistToEvent(eventid, checklist) {
-    // Example: Saving the checklist to the event (could be an API call to save to a database)
-    // Here we're just logging it, but you should replace it with the actual save logic.
+   //log check of data
     console.log(`Saving checklist for event ${eventid}:`, checklist);
 
     // Send the stringified checklist to the backend
-    DataModel.checklistUpdate(eventid, checklist); // The backend expects a string, not an array
+    DataModel.checklistUpdate(eventid, checklist); 
+}
+
+
+
+document.getElementById('addNutritionPlan').addEventListener('click', savePlan);
+
+async function savePlan() {
+    const selectedDate = document.getElementById('nutritionDate').value;
+
+    if (!selectedDate) {
+        alert('Please select a date for the nutrition plan.');
+        return;
+    }
+
+    const eventData = {
+        calendar_id: "nutrition_plan",
+        title: `Nutrition Plan - ${selectedDate}`,
+        start: selectedDate,
+        end: selectedDate,
+        notes: "", // No checklist or notes for nutrition plan
+        event_type: "allday"
+    };
+
+    console.log("Nutrition Plan event data:", eventData);
+
+    DataModel.createEvent(eventData).then(success => {
+        if (success) {
+            fetchAndDisplayEvents();
+            document.getElementById('nutritionPlanModal').style.display = 'none';
+        }
+    });
+}
+
+function openNutritionModal(task) {
+    const nutritionModal = document.getElementById('nutritionPlanEntryModal');
+    const nutritionItemsDiv = document.getElementById('nutritionItems');
+    const saveButton = document.getElementById('saveNutritionButton');
+    const appendButton = document.getElementById('addNutritionItem');
+    const closeButton = document.getElementById('closeNutritionButton');
+
+    const mealTypeInput = document.getElementById('mealType');
+    const itemNameInput = document.getElementById('itemNameInput');
+    const proteinInput = document.getElementById('proteinInput');
+    const carbsInput = document.getElementById('carbsInput');
+    const fatsInput = document.getElementById('fatsInput');
+    const fluidsInput = document.getElementById('fluidsInput');
+
+    if (!nutritionModal || !nutritionItemsDiv || !saveButton || !appendButton) {
+        console.error("Error: Nutrition modal or one of its elements not found.");
+        return;
+    }
+
+    nutritionModal.style.display = 'block';
+
+    let nutritionItems = [];
+
+    try {
+        if (task.raw.nutritionPlan && typeof task.raw.nutritionPlan === 'string') {
+            nutritionItems = JSON.parse(task.raw.nutritionPlan);
+        } else if (Array.isArray(task.raw.nutritionPlan)) {
+            nutritionItems = task.raw.nutritionPlan;
+        }
+    } catch (e) {
+        console.error("Error parsing task.raw.nutritionPlan:", e);
+        nutritionItems = [];
+    }
+
+    const renderNutritionItems = () => {
+        nutritionItemsDiv.innerHTML = '';
+
+        if (nutritionItems.length === 0) {
+            const emptyRow = document.createElement('tr');
+            emptyRow.innerHTML = `<td colspan="7">No nutrition items added.</td>`;
+            nutritionItemsDiv.appendChild(emptyRow);
+            return;
+        }
+
+        nutritionItems.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${item.meal}</td>
+                <td>${item.itemName || ''}</td>
+                <td>${item.protein}</td>
+                <td>${item.carbs}</td>
+                <td>${item.fats}</td>
+                <td>${item.fluids}</td>
+                <td>${item.totalKcal.toFixed(1)}</td>
+            `;
+            nutritionItemsDiv.appendChild(row); // nutritionItemsDiv is already a <tbody>
+        });
+    };
+
+    renderNutritionItems(); // Initial render
+
+    appendButton.onclick = () => {
+        const meal = mealTypeInput.value;
+        const itemName = itemNameInput.value || '';
+        const protein = parseFloat(proteinInput.value) || 0;
+        const carbs = parseFloat(carbsInput.value) || 0;
+        const fats = parseFloat(fatsInput.value) || 0;
+        const fluids = parseFloat(fluidsInput.value) || 0;
+        const totalKcal = (protein * 4) + (carbs * 4) + (fats * 9);
+
+        const newEntry = { meal, itemName, protein, carbs, fats, fluids, totalKcal };
+        nutritionItems.push(newEntry);
+
+        renderNutritionItems();
+
+        // Clear inputs
+        mealTypeInput.value = 'Breakfast';
+        itemNameInput.value = '';
+        proteinInput.value = '';
+        carbsInput.value = '';
+        fatsInput.value = '';
+        fluidsInput.value = '0';
+    };
+
+    saveButton.onclick = () => {
+        calendar.updateEvent(task.id, task.calendarId, {
+            raw: {
+                ...task.raw,
+                nutritionPlan: JSON.stringify(nutritionItems),
+            },
+        });
+
+        saveNutritionToEvent(task.id, nutritionItems);
+        nutritionModal.style.display = 'none';
+    };
+
+    closeButton.onclick = () => {
+        mealTypeInput.value = 'Breakfast';
+        itemNameInput.value = '';
+        proteinInput.value = '';
+        carbsInput.value = '';
+        fatsInput.value = '';
+        fluidsInput.value = '0';
+        nutritionModal.style.display = 'none';
+    };
+}
+
+function saveNutritionToEvent(eventId, nutritionItems) {
+    console.log(`Saving nutrition plan for event ${eventId}:`, nutritionItems);
+    DataModel.checklistUpdate(eventId, nutritionItems); // Your backend hook
 }
 
 document.addEventListener('DOMContentLoaded', () => {

@@ -130,46 +130,46 @@ document.addEventListener('DOMContentLoaded', function () {
     
     function saveEvent() {
         const title = document.getElementById('eventTitle').value;
-    const start = document.getElementById('eventDate').value;
-    const end = document.getElementById('eventDate').value;
-    const notes = document.getElementById('eventNotes') ? document.getElementById('eventNotes').value : '';
+        const start = document.getElementById('eventDate').value;
+        const end = document.getElementById('eventDate').value;
+        const notes = document.getElementById('eventNotes') ? document.getElementById('eventNotes').value : '';
 
-    // Get all the event items (time and detail fields) from the Todo list
-    const eventItems = [];
-    const eventItemElements = document.querySelectorAll('.eventItem');
+        // Get all the event items (time and detail fields) from the Todo list
+        const eventItems = [];
+        const eventItemElements = document.querySelectorAll('.eventItem');
 
-    eventItemElements.forEach(item => {
-        const time = item.querySelector('.eventTime').value;
-        const detail = item.querySelector('.eventDetail').value;
-        if (time && detail) {
-            eventItems.push({ time: time, detail: detail });
-        }
-    });
-
-    // Format the checklist for notes (if you want to store them as a checklist)
-    const checklist = eventItems.map(item => ({
-        item: `${item.time} - ${item.detail}`,
-        complete: false
-    }));
-
-    // Event data object
-    const eventData = {
-        calendar_id: "daily_journal",
-        title: title,
-        start: start,
-        end: end,
-        notes: JSON.stringify(checklist), // Store the checklist as JSON in the notes field
-        event_type: "allday"
-    };
-
-    console.log("Event data:", eventData);
-    
-        DataModel.createEvent(eventData).then(success => {
-            if (success) {
-                fetchAndDisplayEvents()
-                closeEventModal();
+        eventItemElements.forEach(item => {
+            const time = item.querySelector('.eventTime').value;
+            const detail = item.querySelector('.eventDetail').value;
+            if (time && detail) {
+                eventItems.push({ time: time, detail: detail });
             }
         });
+
+        // Format the checklist for notes (if you want to store them as a checklist)
+        const checklist = eventItems.map(item => ({
+            item: `${item.time} - ${item.detail}`,
+            complete: false
+        }));
+
+        // Event data object
+        const eventData = {
+            calendar_id: "daily_journal",
+            title: title,
+            start: start,
+            end: end,
+            notes: JSON.stringify(checklist), // Store the checklist as JSON in the notes field
+            event_type: "allday"
+        };
+
+        console.log("Event data:", eventData);
+        
+            DataModel.createEvent(eventData).then(success => {
+                if (success) {
+                    fetchAndDisplayEvents()
+                    closeEventModal();
+                }
+            });
     }
 
     function closeEventModal() {
@@ -210,31 +210,40 @@ document.addEventListener('DOMContentLoaded', function () {
     calendar.on('clickEvent', function(event) {
         const task = event.event;
         const notesText = task.raw?.notes || "No description available.";
-        
-        // Only trigger the confirmation for tasks
-        if (task.category === 'task') {
-            const message = `${task.title}\n\n${notesText}\n\nDo you want to complete this task?`;
-            
-            if (window.confirm(message)) {
-                alert('Task completed!');
-                DataModel.toggleTaskCompletion(task.id);
     
-                // Update the task color to indicate completion
-                calendar.updateEvent(task.id, task.calendarId, {
-                    backgroundColor: '#90EE90', // Green background to indicate completion
-                });
+        switch (task.calendarId) {
+            case 'exercise':
+                // Tasks
+                const message = `${task.title}\n\n${notesText}\n\nDo you want to complete this task?`;
     
-                calendar.render();
-            } else {
-                alert('Task not completed.');
-            }
-        }
+                if (window.confirm(message)) {
+                    alert('Task completed!');
+                    DataModel.toggleTaskCompletion(task.id);
     
-        // Open the checklist modal only for the 'daily_journal' calendar
-        if (task.calendarId === 'daily_journal') {
-            // Pass the relevant task data to the modal
-            openChecklistModal(task);
+                    // Update task appearance
+                    calendar.updateEvent(task.id, task.calendarId, {
+                        backgroundColor: '#90EE90', // Light green
+                    });
+    
+                    calendar.render();
+                } else {
+                    alert('Task not completed.');
+                }
+                break;
+    
+            case 'daily_journal':
+                // Open the checklist modal
+                openChecklistModal(task);
+                break;
+    
+            case 'nutrition_plan':
+                openNutritionModal(task);
+                break;
+    
+            default:
+                console.warn('Unhandled calendar ID:', task.calendarId);
         }
     });
+    
         
 });

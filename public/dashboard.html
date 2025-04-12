@@ -66,23 +66,23 @@
        </div>
    </div>
 
-<div class="button-container">
-    <div class="button-group">
-        <button class="button" id="dailyJournalButton">Action Plan</button>
-        <button class="button" id="trainingPlanButton">Training Plan</button>
+    <div class="button-container">
+        <div class="button-group">
+            <button class="button" id="dailyJournalButton">Action Plan</button>
+            <button class="button" id="trainingPlanButton">Training Plan</button>
+        </div>
+
+        <div class="button-gap"></div> <!-- Creates space between button groups -->
+
+        <img src="logo.png" class="logo" alt="Logo">
+
+        <div class="button-gap"></div> <!-- Creates space between button groups -->
+
+        <div class="button-group">
+            <button class="button" id="nutritionPlanButton">Nutrition Plan</button>
+            <button class="button">Meditation</button>
+        </div>
     </div>
-
-    <div class="button-gap"></div> <!-- Creates space between button groups -->
-
-    <img src="logo.png" class="logo" alt="Logo">
-
-    <div class="button-gap"></div> <!-- Creates space between button groups -->
-
-    <div class="button-group">
-        <button class="button" id="nutritionPlanButton">Nutrition Plan</button>
-        <button class="button">Meditation</button>
-    </div>
-</div>
 
 
    <!-- Calendar Container -->
@@ -204,35 +204,83 @@
     </div>
 
     <!-- Nutrition Plan Modal -->
-<div id="nutritionPlanModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeNutritionPlanModal()">&times;</span>
-        <h2>Create a Nutrition Plan</h2>
-        <h3>Mifflin St. Jeor</h3>
-        <form id="nutritionPlanForm">
-            <p><strong>Men:</strong> 10 x 
-                <input type="number" id="menKg" placeholder="weight">kilograms + 
-                6.25 x <input type="number" id="menInches" placeholder="height">inches - 
-                5 x <input type="number" id="menAge" placeholder="age">years + 5
-              </p>
-        
-              <p><strong>Women:</strong> 10 x 
-                <input type="number" id="womenKg" placeholder="weight">kilograms + 
-                6.25 x <input type="number" id="womenInches" placeholder="height">inches - 
-                5 x <input type="number" id="womenAge" placeholder="age">years - 161
-              </p>
+    <div id="nutritionPlanModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeNutritionPlanModal()">&times;</span>
+            <h2>Create a Nutrition Plan</h2>
+            <h3>Mifflin St. Jeor</h3>
+            <form id="nutritionPlanForm">
+                <p><strong>Men:</strong> 10 x 
+                    <input type="number" id="menKg" placeholder="weight"> kilograms + 
+                    6.25 x <input type="number" id="menInches" placeholder="height"> inches - 
+                    5 x <input type="number" id="menAge" placeholder="age"> years + 5
+                </p>
+            
+                <p><strong>Women:</strong> 10 x 
+                    <input type="number" id="womenKg" placeholder="weight"> kilograms + 
+                    6.25 x <input type="number" id="womenInches" placeholder="height"> inches - 
+                    5 x <input type="number" id="womenAge" placeholder="age"> years - 161
+                </p>
 
-            <button type="submit">Save Plan</button>
-            <button type="button" id="closeNutritionPlan">Cancel</button>
+                <button type="submit">Save Plan</button>
+                <button type="button" id="closeNutritionPlan">Cancel</button>
 
-            <div style="margin-top: 20px;">
-                <p id="menResult">Men = </p>
-                <p id="womenResult">Women = </p>
-            </div>
-              
-        </form>
+                <div style="margin: 20px 0;">
+                    <label for="nutritionDate"><strong>Select Date:</strong></label>
+                    <input type="date" id="nutritionDate">
+                    <button type="button" id="addNutritionPlan">Add Nutrition Plan</button>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <p id="menResult">Men = </p>
+                    <p id="womenResult">Women = </p>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
+
+    <div id="nutritionPlanEntryModal" class="modal" style="display:none; font-family: Arial; border: 1px solid #ccc; padding: 20px; max-width: 700px; background-color: #fff; position: absolute; z-index: 9999;">
+        <h2>Nutrition Plan</h2>
+    
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
+            <thead>
+                <tr style="border-bottom: 1px solid #ccc;">
+                    <th>Meal</th>
+                    <th>Item Name</th>
+                    <th>Protein (g)</th>
+                    <th>Carbs (g)</th>
+                    <th>Fats (g)</th>
+                    <th>Fluids (mL)</th>
+                    <th>Total (kcal)</th>
+                </tr>
+            </thead>
+            <tbody id="nutritionItems"></tbody>
+        </table>
+    
+        <div style="margin-bottom: 10px;">
+            <select id="mealType">
+                <option value="Breakfast">Breakfast</option>
+                <option value="Lunch">Lunch</option>
+                <option value="Dinner">Dinner</option>
+                <option value="Snack">Snack</option>
+            </select>
+    
+            <input type="text" id="itemNameInput" placeholder="Item Name" style="width: 120px;" />
+            <input type="number" id="proteinInput" placeholder="Protein (g)" style="width: 100px;" />
+            <input type="number" id="carbsInput" placeholder="Carbs (g)" style="width: 100px;" />
+            <input type="number" id="fatsInput" placeholder="Fats (g)" style="width: 100px;" />
+            <input type="number" id="fluidsInput" placeholder="Fluids (mL)" value="0" style="width: 100px;" />
+            <button id="addNutritionItem">Add</button>
+        </div>
+    
+        <div>
+            <button id="saveNutritionButton">Save</button>
+            <button id="closeNutritionButton">Close</button>
+        </div>
+    </div>
+    
+
+
 
    <!-- Toast UI Calendar JS from CDN -->
    <script src="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.js" defer></script>
