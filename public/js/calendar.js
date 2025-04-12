@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 start: event.start, // Ensure format is YYYY-MM-DDTHH:mm:ss
                 end: event.end,
                 raw: {
-                    checklist: event.notes // Store the checklist in the raw field
+                    notes: event.notes // Store the checklist in the raw field
                 },
             }));
     

@@ -349,8 +349,8 @@ function openChecklistModal(task) {
     let checklist = [];
 
     try {
-        if (task.raw.checklist && typeof task.raw.checklist === 'string') {
-            checklist = JSON.parse(task.raw.checklist);
+        if (task.raw.notes && typeof task.raw.notes === 'string') {
+            checklist = JSON.parse(task.raw.notes);
         } else {
             checklist = [];
         }
@@ -500,8 +500,8 @@ function openNutritionModal(task) {
     let nutritionItems = [];
 
     try {
-        if (task.raw.checklist && typeof task.raw.checklist === 'string') {
-            nutritionItems = JSON.parse(task.raw.checklist);
+        if (task.raw.notes && typeof task.raw.notes === 'string') {
+            nutritionItems = JSON.parse(task.raw.notes);
         }    
     } 
     catch (e) {
