@@ -212,7 +212,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const notesText = task.raw?.notes || "No description available.";
     
         switch (task.calendarId) {
-            case 'exercise':
+            case 'excersise':
                 // Tasks
                 const message = `${task.title}\n\n${notesText}\n\nDo you want to complete this task?`;
     
