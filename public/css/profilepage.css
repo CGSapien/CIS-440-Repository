@@ -19,7 +19,7 @@ html, body {
     left: 0;
     z-index: -1; /* Ensures it stays in the background */
  }
- /* Quadrants */
+ /* Quadrants
  .quadrant {
     width: 100%;
     height: 100%;
@@ -27,7 +27,7 @@ html, body {
  .top-left { background-color: #00ac9f; }
  .top-right { background-color: #2e6db4; }
  .bottom-left { background-color: #df0024; }
- .bottom-right { background-color: #f3c300; }
+ .bottom-right { background-color: #f3c300; } */
  /* Main UI elements stay above background */
  .header, .button-container, .container, #calendar {
     position: relative;

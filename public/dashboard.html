@@ -8,7 +8,15 @@
     <link rel="stylesheet" href="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.css" />
     
     <style>
-        body { font-family: Impact, sans-serif; }
+        body { font-family: Impact, sans-serif; 
+            background: conic-gradient(
+            from 180deg at 50% 50%,
+            #00AB9F 0deg,
+            #2E6DB4 90deg,
+            #F3C300 180deg,
+            #DF0024 270deg,
+            #00AB9F 360deg
+        );}
         .modal {
             display: none;
             position: fixed;
@@ -129,7 +137,7 @@
    
 
    <div class="modal-overlay" id="trainingModalOverlay"></div>
-   <div id="trainingModal" class="modal" style="width: 90%; max-width: 1000px; font-family: Arial;">
+   <div id="trainingModal" class="modal" style="width: 100%; max-width: 1300px; font-family: Arial;">
        <h2>Create a Training Plan</h2>
        <p style="margin-bottom: 20px;">
            Fill out your training plan including warm-up, main exercises, and flexibility work. 
@@ -147,7 +155,15 @@
            <div id="warmup-section">
                <h3>Warm-Up Exercises</h3>
                <div class="exercise-entry warmup-entry" style="display: flex; gap: 10px; flex-wrap: wrap; padding-top: 10px;">
-                   <input type="text" name="warmupName[]" placeholder="Exercise Name">
+                <select style="width: 150px;" onchange="this.nextElementSibling.value = this.value">
+                    <option value="">Select Exercise</option>
+                    <option value="Jumping Jacks">Jumping Jacks</option>
+                    <option value="Arm Circles">Arm Circles</option>
+                    <option value="High Knees">High Knees</option>
+                    <option value="Lunges">Lunges</option>
+                    <option value="Bodyweight Squats">Bodyweight Squats</option>
+                  </select>
+                  <input type="text" name="warmupName[]" placeholder="Or type your own">
                    <input type="number" name="warmupSets[]" placeholder="Sets">
                    <input type="number" name="warmupReps[]" placeholder="Reps">
                    <input type="text" name="warmupLoad[]" placeholder="Load">
@@ -156,32 +172,51 @@
                </div>
                <button type="button" onclick="addExercise('warmup')">Add Warm-Up</button>
            </div>
-   
+           
            <!-- Main Exercise Section -->
            <div id="exercise-section">
-               <h3>Main Exercises</h3>
-               <div class="exercise-entry exercise-entry" style="display: flex; gap: 10px; flex-wrap: wrap; padding-top: 10px;">
-                   <input type="text" name="exerciseName[]" placeholder="Exercise Name">
-                   <input type="number" name="exerciseSets[]" placeholder="Sets">
-                   <input type="number" name="exerciseReps[]" placeholder="Reps">
-                   <input type="text" name="exerciseLoad[]" placeholder="Load">
-                   <input type="text" name="exerciseDistance[]" placeholder="Distance (e.g. meters)">
-                   <input type="text" name="exerciseNotes[]" placeholder="Notes">
-               </div>
-               <button type="button" onclick="addExercise('exercise')">Add Main Exercise</button>
-           </div>
+            <h3>Main Exercises</h3>
+            <div class="exercise-entry exercise-entry" style="display: flex; gap: 10px; flex-wrap: wrap; padding-top: 10px;">
+                <select style="width: 150px;" onchange="this.nextElementSibling.value = this.value">
+                <option value="">Select Exercise</option>
+                <option value="Bench Press">Bench Press</option>
+                <option value="Deadlift">Deadlift</option>
+                <option value="Barbell Squat">Barbell Squat</option>
+                <option value="Pull-Ups">Pull-Ups</option>
+                <option value="Overhead Press">Overhead Press</option>
+                <option value="Dumbbell Rows">Dumbbell Rows</option>
+              </select>
+              <input type="text" name="exerciseName[]" placeholder="Or type your own">
+              <input type="number" name="exerciseSets[]" placeholder="Sets">
+              <input type="number" name="exerciseReps[]" placeholder="Reps">
+              <input type="text" name="exerciseLoad[]" placeholder="Load">
+              <input type="text" name="exerciseDistance[]" placeholder="Distance (e.g. meters)">
+              <input type="text" name="exerciseNotes[]" placeholder="Notes">
+            </div>
+            <button type="button" onclick="addExercise('exercise')">Add Main Exercise</button>
+          </div>
+          
    
            <!-- Flexibility Section -->
            <div id="flexibility-section">
-               <h3>Flexibility Exercises</h3>
-               <div class="exercise-entry flexibility-entry" style="display: flex; gap: 10px; flex-wrap: wrap; padding-top: 10px;">
-                   <input type="text" name="flexibilityName[]" placeholder="Exercise Name">
-                   <input type="text" name="flexibilityTime[]" placeholder="Time (e.g. 30s)">
-                   <input type="text" name="flexibilityNotes[]" placeholder="Notes">
-               </div>
-               <button type="button" onclick="addExercise('flexibility')">Add Flexibility Exercise</button>
-           </div>
-   
+            <h3>Flexibility Exercises</h3>
+            <div class="exercise-entry flexibility-entry" style="display: flex; gap: 10px; flex-wrap: wrap; padding-top: 10px;">
+                <select style="width: 150px;" onchange="this.nextElementSibling.value = this.value">
+                <option value="">Select Exercise</option>
+                <option value="Hamstring Stretch">Hamstring Stretch</option>
+                <option value="Quad Stretch">Quad Stretch</option>
+                <option value="Cat-Cow Stretch">Cat-Cow Stretch</option>
+                <option value="Child's Pose">Child's Pose</option>
+                <option value="Seated Forward Fold">Seated Forward Fold</option>
+                <option value="Downward Dog">Downward Dog</option>
+                </select>
+                <input type="text" name="flexibilityName[]" placeholder="Or type your own">
+                <input type="text" name="flexibilityTime[]" placeholder="Time (e.g. 30s)">
+                <input type="text" name="flexibilityNotes[]" placeholder="Notes">
+            </div>
+            <button type="button" onclick="addExercise('flexibility')">Add Flexibility Exercise</button>
+            </div>
+
            <button type="submit">Save Plan</button>
            <button type="button" onclick="closeTrainingModal()">Cancel</button>
        </form>
