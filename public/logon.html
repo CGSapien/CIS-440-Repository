@@ -6,76 +6,105 @@
     <title>Logon</title>
     <link rel="stylesheet" href="css/logon.css">
     <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            flex-direction: column;
-            background: conic-gradient(
-                from 180deg at 50% 50%,
-                #00AB9F 0deg,
-                #2E6DB4 90deg,
-                #F3C300 180deg,
-                #DF0024 270deg,
-                #00AB9F 360deg
-            );
-            position: relative;
-        }
-        /* Quadrant background effect */
-        .top-left, .top-right, .bottom-left, .bottom-right {
-            position: absolute;
-            width: 50%;
-            height: 50%;
-        }
-     
-        
-        /* Labels for quadrants */
-        .quadrant-label {
-            position: absolute;
-            font-size: 1.5em;
-            font-weight: bold;
-        }
-        .top-left .quadrant-label { color: black; top: 10%; left: 10%; }
-        .top-right .quadrant-label { color: white; top: 10%; right: 10%; }
-        .bottom-left .quadrant-label { color: white; bottom: 10%; left: 10%; }
-        .bottom-right .quadrant-label { color: black; bottom: 10%; right: 10%; }
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: conic-gradient(
+    from 180deg at 50% 50%,
+    #00AB9F 0deg,
+    #2E6DB4 90deg,
+    #F3C300 180deg,
+    #DF0024 270deg,
+    #00AB9F 360deg
+  );
+  font-family: Arial, sans-serif;
+}
 
-        /* Centered logo */
-        .logo {
-            top: 40%;
-            transform: translateY(-50%);
-            z-index: 10;
-        }
-        
-        .container {
-            bottom: 20%;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            z-index: 10;
-        }
-        .glass-body {
-            backdrop-filter: blur(16px) saturate(180%);
-            -webkit-backdrop-filter: blur(16px) saturate(180%);
-            background-color: rgba(17, 25, 40, 0.75);
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.125);
-        }
+.card {
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  padding: 2rem;
+  max-width: 400px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo {
+  width: 25vh;
+  height: auto;
+}
+
+.tab {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.tab-button {
+  flex: 1;
+  padding: 0.6rem;
+  border: none;
+  background: #ddd;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 0 5px;
+  border-radius: 5px;
+}
+
+.tab-button.active {
+  background: #bbb;
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+input {
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.button {
+  padding: 0.75rem;
+  background-color: #2E6DB4;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.message {
+  margin-top: 1rem;
+  color: red;
+  text-align: center;
+}
     </style>
 </head>
 <body>
-<body id="glass-body">
-
+    <div class="card">
     <img src="logo.png" alt="FIT HUB Logo" class="logo" style="top: 50%;">
 
-    <div class="container">
         <div class="tab">
             <button class="tab-button active" id="login-tab">Log-in</button>
             <button class="tab-button" id="create-account-tab">Create Account</button>
         </div>
+
         <div id="form-container">
             <form id="logon-form" class="active-form">
                 <label for="login-email">Enter Email:</label>
