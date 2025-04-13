@@ -43,8 +43,60 @@
             background: rgba(0, 0, 0, 0.5);
             z-index: 999;
         }
-        .modal button { margin-top: 10px; }
-       
+
+        .modal h2 {
+           font-size: 1.6rem;
+           margin-bottom: 1rem;
+       }
+        .modal label {
+           display: block;
+           margin-top: 1rem;
+           font-size: 1rem;
+           color: #444;
+       }
+        .modal input[type="text"],
+        .modal input[type="date"],
+        .modal input[type="time"],
+        .modal input[type="startTime"],
+        .modal input[type="datetime-local"],
+        .modal input[type="number"],
+        .modal input[type="submit"],
+        .modal input[type="button"],
+        .modal select { 
+           width: 95%;
+           min-width: 200px; 
+           padding: 10px 12px;
+           margin-top: 0.3rem;
+           font-size: 1rem;
+           border: 1px solid #ccc;
+           border-radius: 10px;
+           background: #f3f4f6;
+           transition: border-color 0.2s;
+       }
+        .modal input:focus {
+           border-color: #6366f1;
+           outline: none;
+           background: #fff;
+           box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+       }
+        .eventItem {
+           display: flex;
+           gap: 0.5rem;
+           margin-top: 0.5rem;
+       }
+        .eventItem input {
+           flex: 1;
+       }
+        .modal button {
+            padding: 10px 16px;
+           margin-top: 1.5rem;
+           margin-right: 0.5rem;
+           border: none;
+           border-radius: 8px;
+           font-size: 1rem;
+           cursor: pointer;
+           transition: background-color 0.2s ease, transform 0.1s ease;
+       }
     </style>
 </head>
 <body>
@@ -239,7 +291,7 @@
     </div>
 
     <!-- Nutrition Plan Modal -->
-    <div id="nutritionPlanModal" class="modal">
+    <div id="nutritionPlanModal" class="modal" style="font-family: Arial;">
         <div class="modal-content">
             <span class="close" onclick="closeNutritionPlanModal()">&times;</span>
             <h2>Create a Nutrition Plan</h2>
