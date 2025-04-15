@@ -44,6 +44,12 @@ document.addEventListener('DOMContentLoaded', () => {
         DataModel.setToken(token);
         loadSavedGoals()
     }
+    
+    document.getElementById("closeNoGoalModal").addEventListener("click", function () {
+        document.getElementById("noMainGoalModal").style.display = "none";
+        document.getElementById("modalOverlay").style.display = "none";
+    });
+    
     //////////////////////////////////////////
     //END CODE THAT NEEDS TO RUN IMMEDIATELY AFTER PAGE LOADS
     //////////////////////////////////////////
@@ -200,6 +206,16 @@ async function loadSavedGoals() {
             tertiaryGoalsContainer.appendChild(tertiaryGoal2);
         }
 
+        document.getElementById("closeNoGoalModal").addEventListener("click", function () {
+            document.getElementById("noMainGoalModal").style.display = "none";
+            document.getElementById("modalOverlay").style.display = "none";
+        });
+
+        if (!response.main_goal) {
+            document.getElementById("noMainGoalModal").style.display = "block";
+            document.getElementById("modalOverlay").style.display = "block";
+        }
+        
     } catch (error) {
         console.error("Error loading saved goals:", error);
     }
