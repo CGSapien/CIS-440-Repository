@@ -461,7 +461,17 @@ function saveChecklistToEvent(eventid, checklist) {
     DataModel.checklistUpdate(eventid, checklist); 
 }
 
+document.getElementById('nutritionPlanButton').addEventListener('click', openNutritionPlanModal);
 
+function openNutritionPlanModal() {
+  document.getElementById('nutritionPlanModal').style.display = 'block';
+  document.getElementById('modalOverlay').style.display = 'block';
+}
+
+function closeNutritionPlanModal() {
+  document.getElementById('nutritionPlanModal').style.display = 'none';
+  document.getElementById('modalOverlay').style.display = 'none';
+}
 
 document.getElementById('addNutritionPlan').addEventListener('click', savePlan);
 
