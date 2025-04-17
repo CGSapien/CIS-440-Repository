@@ -703,6 +703,94 @@ document.getElementById("closeNutritionPlan").addEventListener("click", function
     closeNutritionPlanModal();
 });
 
+
+// Meditation stuff
+document.getElementById("meditationButton").addEventListener("click", () => {
+    document.getElementById("meditationModal").style.display = "block";
+    document.getElementById("meditationOverlay").style.display = "block";
+    startMantraRotation();
+});
+
+document.getElementById("meditationOverlay").addEventListener("click", () => {
+    document.getElementById("meditationModal").style.display = "none";
+    document.getElementById("meditationOverlay").style.display = "none";
+    clearInterval(mantraInterval);
+});
+
+// Default mantras
+let mantras = ["I am calm", "I am present", "I am enough", "Peace flows through me"];
+let currentMantraIndex = 0;
+let mantraInterval;
+
+// Show scrolling mantras
+function startMantraRotation() {
+    const banner = document.getElementById("mantraBanner");
+    if (mantraInterval) clearInterval(mantraInterval);
+    banner.textContent = mantras[currentMantraIndex];
+    mantraInterval = setInterval(() => {
+        currentMantraIndex = (currentMantraIndex + 1) % mantras.length;
+        banner.textContent = mantras[currentMantraIndex];
+    }, 5000);
+}
+
+// Add user mantra (backend ready)
+function addMantra() {
+    const input = document.getElementById("newMantra");
+    const newText = input.value.trim();
+    if (newText) {
+        // You could also POST this to backend here
+        mantras.push(newText);
+        input.value = "";
+    }
+}
+
+// Box Breathing: 4-4-4-4
+function startBoxBreathing() {
+    runBreathingCycle([4, 4, 4, 4], ["Breathe In", "Hold", "Breathe Out", "Hold"]);
+}
+
+// 4-7-8 Breathing
+function start478Breathing() {
+    runBreathingCycle([4, 7, 8], ["Breathe In", "Hold", "Breathe Out"]);
+}
+
+function runBreathingCycle(durations, instructions) {
+    let i = 0;
+    const timerEl = document.getElementById("breathingTimer");
+    const instructionEl = document.getElementById("breathingInstruction");
+
+    function runStep() {
+        if (i >= durations.length) {
+            // End of the cycle
+            instructionEl.textContent = "Breathing complete";
+            timerEl.textContent = "";
+            return;
+        }
+
+        let count = durations[i];
+        instructionEl.textContent = instructions[i];
+        timerEl.textContent = count;
+
+        const interval = setInterval(() => {
+            count--;
+            timerEl.textContent = count;
+            if (count <= 0) {
+                clearInterval(interval);
+                i++;
+                runStep(); // Move to next step
+            }
+        }, 1000);
+    }
+
+    runStep();
+}
+
+function closeMeditationModal() {
+    document.getElementById("meditationModal").style.display = "none";
+    document.getElementById("meditationOverlay").style.display = "none";
+    clearInterval(mantraInterval);
+}
+
 //////////////////////////////////////////
 //END FUNCTIONS TO MANIPULATE THE DOM
 //////////////////////////////////////////

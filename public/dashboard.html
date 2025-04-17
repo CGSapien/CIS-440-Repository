@@ -140,7 +140,7 @@
 
         <div class="button-group">
             <button class="button" id="nutritionPlanButton">Nutrition Plan</button>
-            <button class="button">Meditation</button>
+            <button class="button" id="meditationButton">Meditation</button>
         </div>
     </div>
 
@@ -375,6 +375,31 @@
       
       <div id="modalOverlay" style="display:none;" class="overlay"></div>
       
+    <!-- Meditation Modal -->
+    <div id="meditationModal" class="modal" style="font-family: Arial; max-width: 600px; text-align: center;">
+
+        <div id="mantraBanner" style="font-size: 1.2rem; margin-bottom: 20px; height: 40px; overflow: hidden;"></div>
+
+        <p>Choose a Breathing Exercise!</p>
+        <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">
+            <button onclick="startBoxBreathing()">Box Breathing</button>
+            <button onclick="start478Breathing()">4-7-8 Breathing</button>
+        </div>
+
+        <div id="breathingTimer" style="font-size: 2rem; margin-top: 20px;"></div>
+        <div id="breathingInstruction" style="margin-top: 10px;"></div>
+
+        <div style="margin-top: 30px;">
+            <label for="newMantra">Enter your own mantra/quote:</label><br>
+            <input type="text" id="newMantra" placeholder="Type your mantra here..." style="width: 80%; padding: 8px; border-radius: 8px; margin-top: 10px;">
+            <button onclick="addMantra()">Add Mantra</button>
+        </div>
+        <div style="display: flex; justify-content: flex-start; margin-top: 30px;">
+            <button onclick="closeMeditationModal()">Close</button>
+        </div>
+    </div>
+
+    <div id="meditationOverlay" class="modal-overlay"></div>
 
 
    <!-- Toast UI Calendar JS from CDN -->
