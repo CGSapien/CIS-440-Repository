@@ -64,3 +64,33 @@ h1 {
     padding: 10px;
     border-bottom: 1px solid #ddd;
 }
+
+/* Gender Button Container */
+.gender-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+/* Gender Button Style */
+.gender-btn {
+    padding: 10px 20px;
+    border: 2px solid #ccc;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Hover State */
+.gender-btn:hover {
+    background-color: #e0e0e0;
+}
+
+/* Selected State */
+.gender-btn.selected {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}

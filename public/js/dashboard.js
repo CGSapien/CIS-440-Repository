@@ -661,42 +661,43 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-document.getElementById("nutritionPlanForm").addEventListener("submit", function(e) {
+document.getElementById("nutritionPlanForm").addEventListener("submit", function (e) {
     e.preventDefault();
 
-    // Get input values (convert to floats)
-    const menWeight = parseFloat(document.getElementById("menKg").value) || null;
-    const menHeightInches = parseFloat(document.getElementById("menInches").value) || null;
-    const menAge = parseFloat(document.getElementById("menAge").value) || null;
+    // Get selected gender
+    const selectedGenderButton = document.querySelector('.gender-btn.selected');
+    if (!selectedGenderButton) {
+        alert("Please select a gender.");
+        return;
+    }
+    const selectedGender = selectedGenderButton.getAttribute("data-gender");
 
-    const womenWeight = parseFloat(document.getElementById("womenKg").value) || null;
-    const womenHeightInches = parseFloat(document.getElementById("womenInches").value) || null;
-    const womenAge = parseFloat(document.getElementById("womenAge").value) || null;
+    // Get input values
+    const weight = parseFloat(document.getElementById("weight").value);
+    const heightCm = parseFloat(document.getElementById("height").value);
+    const age = parseFloat(document.getElementById("age").value);
+    const activityLevel = parseFloat(document.getElementById("activity").value);
 
-    let menResult = document.getElementById("menResult");
-    let womenResult = document.getElementById("womenResult");
-
-    // Clear previous results
-    menResult.textContent = "";
-    womenResult.textContent = "";
-
-    // Calculate for Men
-    if (menWeight !== null && menHeightInches !== null && menAge !== null) {
-        const menHeightCm = menHeightInches * 2.54;
-        const menBMR = (10 * menWeight) + (6.25 * menHeightCm) - (5 * menAge) + 5;
-        menResult.textContent = `Men = ${menBMR.toFixed(2)} calories/day`;
-    } else {
-        menResult.textContent = "It looks like you left the values for men empty!";
+    // Validate inputs
+    if (isNaN(weight) || isNaN(heightCm) || isNaN(age) || isNaN(activityLevel)) {
+        alert("Please enter valid numbers for all fields.");
+        return;
     }
 
-    // Calculate for Women
-    if (womenWeight !== null && womenHeightInches !== null && womenAge !== null) {
-        const womenHeightCm = womenHeightInches * 2.54;
-        const womenBMR = (10 * womenWeight) + (6.25 * womenHeightCm) - (5 * womenAge) - 161;
-        womenResult.textContent = `Women = ${womenBMR.toFixed(2)} calories/day`;
+    // Calculate BMR based on gender
+    let bmr;
+    if (selectedGender === "male") {
+        bmr = (10 * weight) + (6.25 * heightCm) - (5 * age) + 5;
     } else {
-        womenResult.textContent = "It looks like you left the values for wom empty!";
+        bmr = (10 * weight) + (6.25 * heightCm) - (5 * age) - 161;
     }
+
+    // Calculate TDEE
+    const tdee = bmr * activityLevel;
+
+    // Display result
+    const resultElement = document.getElementById("calorieResult");
+    resultElement.textContent = `Estimated TDEE: ${tdee.toFixed(2)} calories/day`;
 });
 
 document.getElementById("closeNutritionPlan").addEventListener("click", function () {
