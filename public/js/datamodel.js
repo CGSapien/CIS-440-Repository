@@ -290,8 +290,64 @@ const DataModel = (function () {
                 return false;
             }
         },
+
+        createMantra: async function(mantraText) {
+            try {
+                if (!mantraText || mantraText.trim() === "") {
+                    console.error("Mantra text is required.");
+                    return false;
+                }
         
-            
+                const response = await fetch('/api/newmantra', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': token, // Make sure `token` is accessible in this context
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ mantra: mantraText })
+                });
+        
+                if (!response.ok) {
+                    console.error("Error saving mantra:", await response.json());
+                    return false;
+                }
+        
+                const data = await response.json();
+                console.log("Mantra saved:", data);
+                return true;
+        
+            } catch (error) {
+                console.error("Error in API call:", error);
+                return false;
+            }
+        },
+        getMantras: async function() {
+            try {
+                const response = await fetch('/api/mantras', {
+                    method: 'GET',
+                    headers: {  
+                        'Authorization': token,
+                        'Content-Type': 'application/json'
+                    }
+                });
+        
+                if (!response.ok) {
+                    console.error("Error retrieving mantras:", await response.json());
+                    return null; // Indicate failure
+                }
+        
+                const data = await response.json();
+                console.log('Mantras retrieved:', data);
+        
+                // Extract only the 'mantra' field from the returned rows
+                return data.mantras.map(row => row.mantra);
+        
+            } catch (error) {
+                console.error("Error in API call:", error);
+                return null;
+            }
+        },        
+                
         //ADD MORE FUNCTIONS HERE TO FETCH DATA FROM THE SERVER
         //AND SEND DATA TO THE SERVER AS NEEDED
     };

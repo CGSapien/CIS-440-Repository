@@ -413,6 +413,62 @@ app.delete('/api/events/deleteEvent/:event_id', authenticateToken, async (req, r
     }
 });
 
+// add a mantra
+app.post('/api/newmantra', authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user.email;
+        const { mantra } = req.body;
+
+        if (!mantra) {
+            return res.status(400).json({ message: 'Missing required field: mantra.' });
+        }
+
+        const connection = await createConnection();
+
+        const [result] = await connection.execute(
+            `INSERT INTO user_mantras (user_id, mantra) VALUES (?, ?)`,
+            [userId, mantra]
+        );
+
+        await connection.end();
+
+        if (!result) {
+            return res.status(500).json({ message: 'Error inserting mantra into the database.' });
+        }
+
+        res.status(201).json({ message: 'Mantra saved successfully.', mantra_id: result.insertId });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error saving mantra.', error: error.message });
+    }
+});
+
+app.get('/api/mantras', authenticateToken, async (req, res) => {
+    let connection;
+    try {
+        const userEmail = req.user.email;
+
+        connection = await createConnection();
+        const [rows] = await connection.execute(
+            'SELECT id, mantra, created_at FROM user_mantras WHERE user_id = ? ORDER BY created_at DESC',
+            [userEmail]
+        );
+
+        if (!rows.length) {
+            return res.status(404).json({ message: 'No mantras found for this user.' });
+        }
+
+        res.status(200).json({ mantras: rows });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error retrieving mantras.', error: error.message });
+
+    } finally {
+        if (connection) await connection.end(); // Safely close connection
+    }
+});
 
 // Start the server
 app.listen(port, () => {

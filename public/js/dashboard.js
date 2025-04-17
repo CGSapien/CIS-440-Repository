@@ -723,22 +723,35 @@ let currentMantraIndex = 0;
 let mantraInterval;
 
 // Show scrolling mantras
-function startMantraRotation() {
+async function startMantraRotation() {
     const banner = document.getElementById("mantraBanner");
+
+    // Fetch mantras from the backend
+    const fetchedMantras = await DataModel.getMantras();
+    if (fetchedMantras) {
+        // Add the fetched mantras to the default list
+        mantras = ["I am calm", "I am present", "I am enough", "Peace flows through me", ...fetchedMantras];
+    } else {
+        // If no mantras are fetched, use the default list
+        mantras = ["I am calm", "I am present", "I am enough", "Peace flows through me"];
+    }
+
     if (mantraInterval) clearInterval(mantraInterval);
     banner.textContent = mantras[currentMantraIndex];
+
     mantraInterval = setInterval(() => {
         currentMantraIndex = (currentMantraIndex + 1) % mantras.length;
         banner.textContent = mantras[currentMantraIndex];
     }, 5000);
 }
 
+
 // Add user mantra (backend ready)
 function addMantra() {
     const input = document.getElementById("newMantra");
     const newText = input.value.trim();
     if (newText) {
-        // You could also POST this to backend here
+        DataModel.createMantra(newText)
         mantras.push(newText);
         input.value = "";
     }
