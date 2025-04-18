@@ -696,6 +696,7 @@ document.getElementById("nutritionPlanForm").addEventListener("submit", function
 
     // Calculate BMR based on gender
     let bmr;
+    event.preventDefault();
     if (selectedGender === "male") {
         bmr = (10 * weight) + (6.25 * heightCm) - (5 * age) + 5;
     } else {
@@ -708,6 +709,10 @@ document.getElementById("nutritionPlanForm").addEventListener("submit", function
     // Display result
     const resultElement = document.getElementById("calorieResult");
     resultElement.textContent = `Estimated TDEE: ${tdee.toFixed(2)} calories/day`;
+    
+    const bmrResultDisplay = document.getElementById('bmrResultDisplay');
+    bmrResultDisplay.textContent = `Your current BMR: ${bmr.toFixed(2)} Kcal`;
+
 });
 
 document.getElementById("closeNutritionPlan").addEventListener("click", function () {
@@ -814,6 +819,29 @@ function closeMeditationModal() {
     document.getElementById("meditationOverlay").style.display = "none";
     clearInterval(mantraInterval);
 }
+
+function selectGender(gender) {
+    const manBtn = document.getElementById('manBtn');
+    const womanBtn = document.getElementById('womanBtn');
+
+    if (gender === 'man') {
+        manBtn.classList.add('selected');
+        womanBtn.classList.remove('selected');
+    } else if (gender === 'woman') {
+        womanBtn.classList.add('selected');
+        manBtn.classList.remove('selected');
+    }
+}
+
+window.selectGender = selectGender;
+
+document.addEventListener('DOMContentLoaded', () => {
+    const manBtn = document.getElementById('manBtn');
+    const womanBtn = document.getElementById('womanBtn');
+
+    manBtn.addEventListener('click', () => selectGender('man'));
+    womanBtn.addEventListener('click', () => selectGender('woman'));
+});
 
 //////////////////////////////////////////
 //END FUNCTIONS TO MANIPULATE THE DOM
