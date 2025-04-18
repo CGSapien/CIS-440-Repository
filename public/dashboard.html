@@ -295,40 +295,35 @@
         <div class="modal-content">
             <span class="close" onclick="closeNutritionPlanModal()">&times;</span>
             <h2>Create a Nutrition Plan</h2>
-
-            <!-- Gender Selection Buttons -->
-            <div id="genderSelection" class="gender-buttons">
-                <button type="button" class="gender-btn" data-gender="male">Men</button>
-                <button type="button" class="gender-btn" data-gender="female">Women</button>
-            </div>
-
             <form id="nutritionPlanForm">
-                <!-- Inputs -->
-                <label for="weight">Weight (kg):</label>
-                <input type="number" id="weight" name="weight" required><br>
+                <p><strong>Men:</strong> 10 x 
+                    <input type="number" id="menKg" placeholder="weight"> kilograms + 
+                    6.25 x <input type="number" id="menInches" placeholder="height"> inches - 
+                    5 x <input type="number" id="menAge" placeholder="age"> years + 5
+                </p>
+            
+                <p><strong>Women:</strong> 10 x 
+                    <input type="number" id="womenKg" placeholder="weight"> kilograms + 
+                    6.25 x <input type="number" id="womenInches" placeholder="height"> inches - 
+                    5 x <input type="number" id="womenAge" placeholder="age"> years - 161
+                </p>
 
-                <label for="height">Height (cm):</label>
-                <input type="number" id="height" name="height" required><br>
+                <button type="submit">Save Plan</button>
+                <button type="button" id="closeNutritionPlan">Cancel</button>
 
-                <label for="age">Age:</label>
-                <input type="number" id="age" name="age" required><br>
+                <div style="margin: 20px 0;">
+                    <label for="nutritionDate"><strong>Select Date:</strong></label>
+                    <input type="date" id="nutritionDate">
+                    <button type="button" id="addNutritionPlan">Add Nutrition Plan</button>
+                </div>
 
-                <label for="activity">Activity Level:</label>
-                <select id="activity" name="activity" required>
-                    <option value="">Select</option>
-                    <option value="1.2">Sedentary (little or no exercise)</option>
-                    <option value="1.375">Lightly active</option>
-                    <option value="1.55">Moderately active</option>
-                    <option value="1.725">Very active</option>
-                    <option value="1.9">Extra active</option>
-                </select><br>
-
-                <button type="submit" id="calculateCalories">Calculate</button><br>
-                <p id="calorieResult"></p>
+                <div style="margin-top: 20px;">
+                    <p id="menResult">Men = </p>
+                    <p id="womenResult">Women = </p>
+                </div>
             </form>
         </div>
     </div>
-    
 
     <div id="nutritionPlanEntryModal" class="modal" style="display:none; font-family: Arial; border: 1px solid #ccc; padding: 20px; max-width: 700px; background-color: #fff; position: absolute; z-index: 9999;">
         <h2>Nutrition Plan</h2>
