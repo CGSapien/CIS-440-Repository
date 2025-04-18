@@ -90,13 +90,7 @@ h1 {
 
 /* Selected State */
 .gender-btn.selected {
-    background-color: #28a745 !important;
-    color: white !important;
-    border-color: #28a745 !important;
-}
-
-#bmrResultDisplay {
-    font-weight: bold;
-    text-align: center;
-    color: #007bff;
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
 }

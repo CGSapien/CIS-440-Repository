@@ -294,12 +294,11 @@
             <span class="close" onclick="closeNutritionPlanModal()">&times;</span>
             <h2>Create a Nutrition Plan</h2>
 
-    <!-- Gender Selection Buttons
-    <div id="genderSelection" class="gender-buttons">
-        <button type="button" class="gender-btn" id="manBtn" onclick="selectGender('man')">Man</button>
-        <button type="button" class="gender-btn" id="womanBtn" onclick="selectGender('woman')">Woman</button>
-    </div>     -->
-
+            <!-- Gender Selection Buttons -->
+            <div id="genderSelection" class="gender-buttons">
+                <button type="button" class="gender-btn" data-gender="male">Men</button>
+                <button type="button" class="gender-btn" data-gender="female">Women</button>
+            </div>
 
             <form id="nutritionPlanForm">
                 <!-- Inputs -->
@@ -321,7 +320,7 @@
                     <option value="1.725">Very active</option>
                     <option value="1.9">Extra active</option>
                 </select><br>
-                <div id="bmrResultDisplay" style="margin-bottom: 20px; font-size: 16px; color: #333;"></div>
+
                 <button type="submit" id="calculateCalories">Calculate</button><br>
                 <p id="calorieResult"></p>
             </form>
