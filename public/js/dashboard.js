@@ -219,10 +219,10 @@ async function loadSavedGoals() {
             document.getElementById("modalOverlay").style.display = "none";
         });
 
-        if (!response.main_goal) {
-            document.getElementById("noMainGoalModal").style.display = "block";
-            document.getElementById("modalOverlay").style.display = "block";
-        }
+        // if (!response.main_goal) {
+        //     document.getElementById("noMainGoalModal").style.display = "block";
+        //     document.getElementById("modalOverlay").style.display = "block";
+        // }
         
     } catch (error) {
         console.error("Error loading saved goals:", error);
