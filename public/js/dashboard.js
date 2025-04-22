@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //////////////////////////////////////////////////////
     //CODE THAT NEEDS TO RUN IMMEDIATELY AFTER PAGE LOADS
     //////////////////////////////////////////////////////
-    checkIfMainGoalIsEmptyAndShowModal()
+    siteExplanation()
     // Initial check for the token
     const token = localStorage.getItem('jwtToken');
     if (!token) {
@@ -94,7 +94,7 @@ function addTertiaryGoal(button) {
     parentDiv.appendChild(div);
 }
 
-function checkIfMainGoalIsEmptyAndShowModal() {
+function siteExplanation() {
     const mainGoalInput = document.getElementById("mainGoal");
     if (!mainGoalInput.value.trim()) {
         document.getElementById("noMainGoalModal").style.display = "block";
