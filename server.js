@@ -341,12 +341,12 @@ app.post('/api/newevents', authenticateToken, async (req, res) => {
         const connection = await createConnection();
         let result;
 
-        if (calendar_id === "exercise") {
+        if (calendar_id === "excersise") {
             // Insert task (has iscomplete)
             [result] = await connection.execute(
                 `INSERT INTO events (user_id, calendar_id, title, start, end, notes, event_type, iscomplete) 
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-                [userId, calendar_id, title, start, end, notes || null, event_type, iscomplete ? 1 : 0]
+                [userId, calendar_id, title, start, end, notes || null, event_type, iscomplete ]
             );
         } else if (calendar_id === "daily_journal" || calendar_id === "nutrition_plan") {
             [result] = await connection.execute(
